@@ -1,0 +1,11 @@
+body {
+    align-items: center;
+    text-align: left;
+}
+
+input[type="text"], input[type="password"] {
+    border: 1px solid darkgray;
+    border-radius: 5px;
+    height: 30px;
+    padding: 5px;
+}
