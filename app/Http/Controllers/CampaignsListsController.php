@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use Maatwebsite\Excel\Facades\Excel;
-use App\Models\Campaigns;
+use App\Models\CampaignsLists;
 use Illuminate\Http\Request;
 use App\Imports\ContrattiImport;
 
-class CampaignsController extends Controller
+class CampaignsListsController extends Controller
 {
 
     public function index()
     {
-        $campaigns = Campaigns::paginate(10);
+        // $campaigns = CampaignsLists::paginate(10);
 
-        return view('campaigns.index', compact('campaigns'));
+        // return view('campaigns.index', compact('campaigns'));
     }
 
     
@@ -39,7 +39,7 @@ class CampaignsController extends Controller
 
         return back()->with('success', "Importazione completata. 
             Righe importate: $importati, 
-            Duplicati: $gitduplicati");
+            Duplicati: $duplicati");
     }
 
 
