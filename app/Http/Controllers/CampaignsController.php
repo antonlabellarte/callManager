@@ -39,7 +39,7 @@ class CampaignsController extends Controller
 
         return back()->with('success', "Importazione completata. 
             Righe importate: $importati, 
-            Duplicati: $duplicati");
+            Duplicati: $gitduplicati");
     }
 
 
