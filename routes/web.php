@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CampaignsRulesController;
+use App\Http\Controllers\QueuesController;
 use App\Http\Controllers\RulesControllers;
 
 // Schermata di login
@@ -17,7 +18,7 @@ Route::get('/logout', LoginController::class .'@logout')->name('logout')->middle
 // Rotta iniziale
 Route::get('/', function () { return view('welcome');})->middleware('auth');
 
-/* Code */
+/* Regole */
 // Lista regole
 Route::get('/rules/list', RulesControllers::class .'@index')->name('rules.index')->middleware('auth');
 // Nuove regola (create)
@@ -27,21 +28,31 @@ Route::get('/rules/storing', RulesControllers::class .'@store')->name('rules.sto
 // Elimina regola (delete)
 Route::delete('/rules/{id}', RulesControllers::class . '@destroy')->name('rules.destroy')->middleware('auth');
 
+/* Code */
+// Lista regole
+Route::get('/queues/list', QueuesController::class .'@index')->name('queues.index')->middleware('auth');
+// Nuove regola (create)
+Route::get('/queues/create', QueuesController::class .'@create')->name('queues.create')->middleware('auth');
+// Nuova regola (insert)
+Route::get('/queues/storing', QueuesController::class .'@store')->name('queues.store')->middleware('auth');
+// Elimina regola (delete)
+Route::delete('/queues/{id}', QueuesController::class . '@destroy')->name('queues.destroy')->middleware('auth');
+
 /* Campagne */
 // Campagne Regola
-Route::get('/campaignsrules/list', CampaignsRulesController::class .'@index')->name('campaignslists.index')->middleware('auth');
+Route::get('/campaignsrules/list', CampaignsRulesController::class .'@index')->name('campaignsrules.index')->middleware('auth');
 // Nuova campagna regola (create)
-Route::get('/campaignrules/create', CampaignsRulesController::class .'@create')->name('campaignslists.create')->middleware('auth');
+Route::get('/campaignrules/create', CampaignsRulesController::class .'@create')->name('campaignsrules.create')->middleware('auth');
 // Nuova campagna regola (insert)
-Route::get('/campaignrules/storing', CampaignsRulesController::class .'@store')->name('campaignslists.store')->middleware('auth');
+Route::get('/campaignrules/storing', CampaignsRulesController::class .'@store')->name('campaignsrules.store')->middleware('auth');
 // Dettagli campagna regola
-Route::get('campaignrules/details', CampaignRulesController::class .'@details')->name('campaignlists.details')->middleware('auth');
+Route::get('campaignrules/details', CampaignsRulesController::class .'@details')->name('campaignrules.details')->middleware('auth');
 // Modifica campagna regola (edit)
-Route::get('campaignrules/edit', CampaignRulesController::class .'@edit')->name('campaignlists.edit')->middleware('auth');
+Route::get('campaignrules/edit', CampaignsRulesController::class .'@edit')->name('campaignrules.edit')->middleware('auth');
 // Aggiorna campagna regola (update)
-Route::put('/campaignrules/{id}', CampaignRulesController::class . '@update')->name('campaignlists.update')->middleware('auth');
+Route::put('/campaignrules/{id}', CampaignsRulesController::class . '@update')->name('campaignrules.update')->middleware('auth');
 // Elimina regola (delete)
-Route::delete('/rules/{id}', CampaignsRulesController::class . '@destroy')->name('campaignslists.destroy')->middleware('auth');
+Route::delete('/campaignrules/{id}', CampaignsRulesController::class . '@destroy')->name('campaignsrules.destroy')->middleware('auth');
 
 // Importa campagne tramite Excel
 Route::post('/import-excel', CampaignsRulesController::class .'@import')->name('import.excel')->middleware('auth');

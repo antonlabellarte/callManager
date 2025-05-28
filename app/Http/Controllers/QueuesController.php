@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Queues;
 
-class QueueController extends Controller
+class QueuesController extends Controller
 {
     // Visualizza tutte le code
     public function index(){
