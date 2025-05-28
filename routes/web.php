@@ -31,9 +31,15 @@ Route::delete('/rules/{id}', RulesControllers::class . '@destroy')->name('rules.
 // Campagne Regola
 Route::get('/campaignsrules/list', CampaignsRulesController::class .'@index')->name('campaignslists.index')->middleware('auth');
 // Nuova campagna regola (create)
-Route::get('/rules/create', CampaignsRulesController::class .'@create')->name('campaignslists.create')->middleware('auth');
+Route::get('/campaignrules/create', CampaignsRulesController::class .'@create')->name('campaignslists.create')->middleware('auth');
 // Nuova campagna regola (insert)
-Route::get('/rules/storing', CampaignsRulesController::class .'@store')->name('campaignslists.store')->middleware('auth');
+Route::get('/campaignrules/storing', CampaignsRulesController::class .'@store')->name('campaignslists.store')->middleware('auth');
+// Dettagli campagna regola
+Route::get('campaignrules/details', CampaignRulesController::class .'@details')->name('campaignlists.details')->middleware('auth');
+// Modifica campagna regola (edit)
+Route::get('campaignrules/edit', CampaignRulesController::class .'@edit')->name('campaignlists.edit')->middleware('auth');
+// Aggiorna campagna regola (update)
+Route::put('/campaignrules/{id}', CampaignRulesController::class . '@update')->name('campaignlists.update')->middleware('auth');
 // Elimina regola (delete)
 Route::delete('/rules/{id}', CampaignsRulesController::class . '@destroy')->name('campaignslists.destroy')->middleware('auth');
 

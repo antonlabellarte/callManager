@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CampaignsRules;
+use App\Models\CampaignLists;
 use Illuminate\Http\Request;
 
 class CampaignsRulesController extends Controller
@@ -25,7 +26,7 @@ class CampaignsRulesController extends Controller
     public function edit(string $id){
         $rule = CampaignRules::find($id);
 
-        return view('campaignsrules.edit', compact('order', 'customers', 'suppliers'));
+        return view('campaignsrules.edit', compact('rule',));
     }
 
     
@@ -40,4 +41,16 @@ class CampaignsRulesController extends Controller
         
         return back()->with('erased', 'Campaign rule deleted');
     }
+
+    public function details(string $id)
+    {
+        $rule = CampaignRules::find($id);
+
+        // Recupera tutte le liste collegate a questa regola
+        $listsPerRule = CampaignLists::where('regoleid', $id)->get();
+
+        // Passa sia la regola che le liste alla view
+        return view('campaignsrules.details', compact('rule', 'listsPerRule'));
+}
+
 }
