@@ -51,6 +51,9 @@ class CampaignsListsController extends Controller
 
     
     public function destroy(string $id){
-        //
+        // $campaignlist = CampaignsLists::find($id);
+        // $campaignlist->delete();
+        
+        // return back()->with('erased', 'Campaign list deleted');
     }
 }

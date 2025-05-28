@@ -23,7 +23,9 @@ class CampaignsRulesController extends Controller
 
     
     public function edit(string $id){
-        //
+        $rule = CampaignRules::find($id);
+
+        return view('campaignsrules.edit', compact('order', 'customers', 'suppliers'));
     }
 
     
@@ -33,6 +35,9 @@ class CampaignsRulesController extends Controller
 
     
     public function destroy(string $id){
-        //
+        $campaignrule = CampaignsRules::find($id);
+        $campaignrule->delete();
+        
+        return back()->with('erased', 'Campaign rule deleted');
     }
 }
