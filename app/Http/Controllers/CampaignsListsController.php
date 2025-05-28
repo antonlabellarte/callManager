@@ -10,21 +10,18 @@ use App\Imports\ContrattiImport;
 class CampaignsListsController extends Controller
 {
 
-    public function index()
-    {
+    public function index(){
         // $campaigns = CampaignsLists::paginate(10);
 
         // return view('campaigns.index', compact('campaigns'));
     }
 
     
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         //
     }
     
-    public function import(Request $request)
-    {
+    public function import(Request $request){
         $request->validate([
             'file_excel' => 'required|file|mimes:xlsx,xls',
         ]);
@@ -43,20 +40,17 @@ class CampaignsListsController extends Controller
     }
 
 
-    public function show(string $id)
-    {
+    public function edit(string $id){
         //
     }
 
     
-    public function update(Request $request, string $id)
-    {
+    public function update(Request $request, string $id){
         //
     }
 
     
-    public function destroy(string $id)
-    {
+    public function destroy(string $id){
         //
     }
 }

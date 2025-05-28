@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 
 class CampaignsRulesController extends Controller
 {
-    public function index()
-    {
+    public function index(){
         // $campaigns = CampaignsLists::paginate(10);
         $campaignsRules = CampaignsRules::all();
 
@@ -18,26 +17,22 @@ class CampaignsRulesController extends Controller
     }
 
     
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         //
     }
 
     
-    public function show(string $id)
-    {
+    public function edit(string $id){
         //
     }
 
     
-    public function update(Request $request, string $id)
-    {
+    public function update(Request $request, string $id){
         //
     }
 
     
-    public function destroy(string $id)
-    {
+    public function destroy(string $id){
         //
     }
 }

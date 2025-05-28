@@ -11,15 +11,14 @@ class RulesControllers extends Controller
 {
 
     // Visualizza tutte le regole
-    public function index()
-    {
+    public function index(){
         $rules = Rules::all();
 
         return view('rules.index', compact('rules'));
     }
 
     // Pagina di creazione regola
-    public function create() {
+    public function create(){
 
         // Servizio dove tipologia = principale
         $servicesPrincipali = Queues::where('tipologia', 'principale')->get();
@@ -30,8 +29,7 @@ class RulesControllers extends Controller
         return view('rules.add', compact('servicesPrincipali', 'servicesPartizionati'));
     }
     
-    public function store(Request $request)
-    {
+    public function store(Request $request){
 
         $servizio = $request->input('service');
         $flag = $request->input('flag');
@@ -137,20 +135,17 @@ class RulesControllers extends Controller
     }
 
     
-    public function show(string $id)
-    {
+    public function edit(string $id){
         //
     }
 
     
-    public function update(Request $request, string $id)
-    {
+    public function update(Request $request, string $id){
         //
     }
 
     
-    public function destroy(string $id)
-    {
+    public function destroy(string $id){
         $rule = Rules::find($id);
         $rule->delete();
         
