@@ -19,7 +19,7 @@ class CampaignsRulesController extends Controller
 
     
     public function store(Request $request){
-        //
+        $rule = new CampaignRules();
     }
 
     
