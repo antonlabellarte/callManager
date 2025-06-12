@@ -52,6 +52,7 @@
     }
 
     form {
+        background-color: whitesmoke;
         width: 350px;
         display: flex;
         flex-direction: column;
@@ -67,18 +68,7 @@
     }
 
     .loginBtn {
-        margin-top: 20px;
-        border: 1px solid lightgray;
-        border-radius: 35px;
-        background-color: transparent;
-    }
-
-    .loginBtn:hover {
-        outline: 1px solid black;
-    }
-
-    .loginBtn:focus {
-        outline: 2px solid black;
+        margin-top: 10px;
     }
 </style>
 @include('partials.bottom')

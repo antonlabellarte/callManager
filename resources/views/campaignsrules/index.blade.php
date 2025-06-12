@@ -15,13 +15,13 @@
                 <form action="{{ route('import.excel') }}" method="POST" enctype="multipart/form-data" style="display: none;" id="excelForm">
                     @csrf
                     <input type="file" name="file_excel" required>
-                    <button type="submit">Importa</button>
+                    <button type="submit" style="padding: 10px;">Importa</button>
                 </form>
-                <a href="#" style="float: left;">
+                <a href="#" class="defaultBtn" style="float: left; padding: 10px;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/></svg>
                     Aggiungi nuova campagna
                 </a>
-                <button onclick="showExcelForm()" style="float: right;">
+                <button onclick="showExcelForm()" style="float: right; padding: 10px;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-spreadsheet" viewBox="0 0 16 16"><path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5zM3 12v-2h2v2zm0 1h2v2H4a1 1 0 0 1-1-1zm3 2v-2h3v2zm4 0v-2h3v1a1 1 0 0 1-1 1zm3-3h-3v-2h3zm-7 0v-2h3v2z"/></svg>
                     Importa da un file Excel
                 </button>
@@ -101,14 +101,6 @@
 <style>
     .container {
         margin: 0 auto;
-    }
-
-    button, a {
-        border: 1px solid darkgray;
-        background-color: white;
-        padding: 10px;
-        border-radius: 10px;
-        text-decoration: none;
     }
 
     .col {

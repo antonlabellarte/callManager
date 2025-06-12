@@ -20,6 +20,7 @@ class QueuesController extends Controller
         return view('queues.add');
     }
     
+    // Inserimento coda
     public function store(Request $request){
         $queue = new Queues();
         
@@ -34,28 +35,34 @@ class QueuesController extends Controller
         return back()->with('success', 'Part update successfully');
     }
 
-    
-    public function edit(string $id){
-        $queue = Queues::find($id);
-
+    // Pagina di modifica coda
+    public function edit(string $servizio) {
+        $queue = Queues::where('servizio', $servizio)->firstOrFail();
         return view('queues.edit', compact('queue'));
     }
 
-    
-    public function update(Request $request, string $id){
-        $queue = Queues::find($id);
-        
-        $queue->servizio = $request->input('service');
-        $queue->coda = $request->input('queue');
-        $queue->tipologia = $request->input('type');
+    // Aggiornamento coda
+    public function update(Request $request, string $servizio){
+    $queue = Queues::where('servizio', $servizio)->firstOrFail();
 
-        $queue->update($request->all());
-        
-        return redirect()->route('queues.edit', $queue->id)->with('queueUpdated', 'Coda modificata e aggiornata');
-        return back()->with('queueUpdated', 'Coda modificata e aggiornata');
-    }
+    // Salva il valore prima della modifica
+    $originalServizio = $queue->servizio;
 
-    
+    $queue->servizio = $request->input('service');
+    $queue->coda = $request->input('queue');
+    $queue->tipologia = $request->input('type');
+    $queue->specializzazione = $request->input('skillGroup');
+
+    $queue->save();
+
+    return redirect()
+        ->route('queues.edit', $queue->servizio) // ora che è aggiornato
+        ->with('queueUpdated', 'Coda modificata e aggiornata');
+}
+
+
+
+    // Eliminazione coda
     public function destroy(string $id){
         $queue = Queues::find($id);
         $queue->delete();

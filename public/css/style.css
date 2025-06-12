@@ -9,3 +9,17 @@ input[type="text"], input[type="password"] {
     height: 30px;
     padding: 5px;
 }
+
+button, .defaultBtn {
+    text-decoration: none;
+    color: black;
+    background-color:  white;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+}
+button:hover, .defaultBtn:hover {
+    transition: 0.2s;
+    border-color: lightgray;
+    background-color: #5F57A1;
+    color: white;
+}

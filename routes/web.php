@@ -29,13 +29,18 @@ Route::get('/rules/storing', RulesControllers::class .'@store')->name('rules.sto
 Route::delete('/rules/{id}', RulesControllers::class . '@destroy')->name('rules.destroy')->middleware('auth');
 
 /* Code */
-// Lista regole
+// Lista code
 Route::get('/queues/list', QueuesController::class .'@index')->name('queues.index')->middleware('auth');
-// Nuove regola (create)
+// Nuove coda (create)
 Route::get('/queues/create', QueuesController::class .'@create')->name('queues.create')->middleware('auth');
-// Nuova regola (insert)
-Route::get('/queues/storing', QueuesController::class .'@store')->name('queues.store')->middleware('auth');
-// Elimina regola (delete)
+// Nuova coda (insert)
+Route::post('/queues/storing', QueuesController::class .'@store')->name('queues.store')->middleware('auth');
+// Modifica coda (form)
+Route::get('/queues/{servizio}/edit', QueuesController::class .'@edit')->name('queues.edit')->middleware('auth');
+// Aggiorna campagna regola (update)
+Route::put('/queues/{servizio}/updating', QueuesController::class .'@update')->name('queues.update')->middleware('auth');
+
+// Elimina coda (delete)
 Route::delete('/queues/{id}', QueuesController::class . '@destroy')->name('queues.destroy')->middleware('auth');
 
 /* Campagne */
