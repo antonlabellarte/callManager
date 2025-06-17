@@ -37,14 +37,16 @@
         
         <div class="col" style="margin-top: 20px;">
 
-            <form action="{{ route('rules.store') }}"style="display: flex; flex-direction: column;">
-                Servizio
-                <select name="service" id="service">
-                    <option value="">-- Seleziona un servizio --</option>
-                    @foreach ($servicesPrincipali as $service)
-                        <option value="{{ $service->servizio }}">{{ $service->servizio }}</option>                        
-                    @endforeach
-                </select><br>
+            <!-- <form action="{{ route('rules.store') }}">
+                <div class="form-group">
+                    Servizio<br>
+                    <select class="form-control" name="service" id="service">
+                        <option value="">-- Seleziona un servizio --</option>
+                        @foreach ($servicesPrincipali as $service)
+                            <option value="{{ $service->servizio }}">{{ $service->servizio }}</option>                        
+                        @endforeach
+                    </select><br>
+                </div>
 
                 Flag
                 <select name="flag" id="flag" onchange="showDates()">
@@ -291,6 +293,268 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy" viewBox="0 0 16 16"><path d="M11 2H9v3h2z"/><path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z"/></svg>
                     Salva
                 </button>
+            </form> -->
+
+            <form action="{{ route('rules.store') }}"style="display: flex; flex-direction: column;">
+                <!-- Servizio -->
+                <div class="form-group">
+                    <label>Servizio</label>
+                    <select class="form-control" name="service" id="service">
+                        <option value="">-- Seleziona un servizio --</option>
+                        @foreach ($servicesPrincipali as $service)
+                            <option value="{{ $service->servizio }}">{{ $service->servizio }}</option>                        
+                        @endforeach
+                    </select><br>
+                </div>
+
+                <div class="form-group">
+                    <label>Flag</label>
+                    <select class="form-control" name="flag" id="flag" onchange="showDates()">
+                        <option value="ALL">ALL</option>
+                        <option value="SABATO">SABATO</option>
+                        <option value="DOMENICA">DOMENICA</option>
+                        <option value="GIORNO">GIORNO</option>
+                    </select><br>
+                </div>
+
+                <div class="form-group">
+                    Data iniziale
+                    <input class="form-control" type="date" id="startDate" name="startDate">
+
+                    Ora iniziale:
+                    <select name="startHour" id="startHour">
+                        <option value="1">00</option>
+                        <option value="1">01</option>
+                        <option value="2">02</option>
+                        <option value="3">03</option>
+                        <option value="4">04</option>
+                        <option value="5">05</option>
+                        <option value="6">06</option>
+                        <option value="7">07</option>
+                        <option value="8">08</option>
+                        <option value="9">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                    </select> 
+                    :
+                    <select name="startMinute" id="startMinute">
+                        <option value="1">00</option>
+                        <option value="1">01</option>
+                        <option value="2">02</option>
+                        <option value="3">03</option>
+                        <option value="4">04</option>
+                        <option value="5">05</option>
+                        <option value="6">06</option>
+                        <option value="7">07</option>
+                        <option value="8">08</option>
+                        <option value="9">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                        <option value="32">32</option>
+                        <option value="33">33</option>
+                        <option value="34">34</option>
+                        <option value="35">35</option>
+                        <option value="36">36</option>
+                        <option value="37">37</option>
+                        <option value="38">38</option>
+                        <option value="39">39</option>
+                        <option value="40">40</option>
+                        <option value="41">41</option>
+                        <option value="42">42</option>
+                        <option value="43">43</option>
+                        <option value="44">44</option>
+                        <option value="45">45</option>
+                        <option value="46">46</option>
+                        <option value="47">47</option>
+                        <option value="48">48</option>
+                        <option value="49">49</option>
+                        <option value="50">50</option>
+                        <option value="51">51</option>
+                        <option value="52">52</option>
+                        <option value="53">53</option>
+                        <option value="54">54</option>
+                        <option value="55">55</option>
+                        <option value="56">56</option>
+                        <option value="57">57</option>
+                        <option value="58">58</option>
+                        <option value="59">59</option>
+                    </select><br>
+                </div><br>
+
+                <div class="form-group">
+                    Data finale
+                    <input class="form-control" type="date" id="endDate" name="endDate">
+
+                    Ora finale:
+                    <select name="endHour" id="endHour" style="margin-right: 5px;">
+                        <option value="1">00</option>
+                        <option value="1">01</option>
+                        <option value="2">02</option>
+                        <option value="3">03</option>
+                        <option value="4">04</option>
+                        <option value="5">05</option>
+                        <option value="6">06</option>
+                        <option value="7">07</option>
+                        <option value="8">08</option>
+                        <option value="9">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                    </select> 
+                    :
+                    <select name="endMinute" id="endMinute" style="margin-left: 5px;">
+                        <option value="1">00</option>
+                        <option value="1">01</option>
+                        <option value="2">02</option>
+                        <option value="3">03</option>
+                        <option value="4">04</option>
+                        <option value="5">05</option>
+                        <option value="6">06</option>
+                        <option value="7">07</option>
+                        <option value="8">08</option>
+                        <option value="9">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                        <option value="32">32</option>
+                        <option value="33">33</option>
+                        <option value="34">34</option>
+                        <option value="35">35</option>
+                        <option value="36">36</option>
+                        <option value="37">37</option>
+                        <option value="38">38</option>
+                        <option value="39">39</option>
+                        <option value="40">40</option>
+                        <option value="41">41</option>
+                        <option value="42">42</option>
+                        <option value="43">43</option>
+                        <option value="44">44</option>
+                        <option value="45">45</option>
+                        <option value="46">46</option>
+                        <option value="47">47</option>
+                        <option value="48">48</option>
+                        <option value="49">49</option>
+                        <option value="50">50</option>
+                        <option value="51">51</option>
+                        <option value="52">52</option>
+                        <option value="53">53</option>
+                        <option value="54">54</option>
+                        <option value="55">55</option>
+                        <option value="56">56</option>
+                        <option value="57">57</option>
+                        <option value="58">58</option>
+                        <option value="59">59</option>
+                    </select>
+                </div><br>
+
+                <div class="form-group">
+                    Coppia prima coda
+                    <select class="form-control" name="firstQueuePair" id="firstQueuePair" onchange="equalPartitions()">
+                        <option value="">-- Seleziona un sotto-servizio --</option>
+                        @foreach ($servicesPartizionati as $partService)
+                            <option value="{{ $partService->servizio }}" data-prefix="{{ Str::substr($partService->servizio, 0, strlen($servicesPrincipali[0]->servizio)) }}">
+                                {{ $partService->servizio }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    Partizione prima coda
+                    <input type="number" class="form-control" id="firstPartition" max="100" oninput="equalPartitions()"><br>
+                </div><br>
+
+                <div class="form-group">
+                    Coppia seconda coda
+                    <select class="form-control" name="secondQueuePair" id="secondQueuePair" onchange="equalPartitions()">
+                        <option value="">-- Seleziona un sotto-servizio --</option>
+                        @foreach ($servicesPartizionati as $partService)
+                            <option value="{{ $partService->servizio }}" data-prefix="{{ Str::substr($partService->servizio, 0, strlen($servicesPrincipali[0]->servizio)) }}">
+                                {{ $partService->servizio }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    Partizione seconda coda
+                    <input type="number" class="form-control" id="secondPartition" max="100" oninput="equalPartitions()"><br>
+                </div>
+
+                <div class="form-group">
+                    Coppia terza coda
+                    <select class="form-control" name="thirdQueuePair" id="thirdQueuePair" onchange="equalPartitions()">
+                        <option value="">-- Seleziona un sotto-servizio --</option>
+                        @foreach ($servicesPartizionati as $partService)
+                            <option value="{{ $partService->servizio }}" data-prefix="{{ Str::substr($partService->servizio, 0, strlen($servicesPrincipali[0]->servizio)) }}">
+                                {{ $partService->servizio }}
+                            </option>
+                        @endforeach
+                    </select><br>
+
+                    Partizione terza coda
+                    <input type="number" class="form-control" id="thirdPartition" max="100" oninput="equalPartitions()"><br>
+                </div>
+                <button type="submit" class="defaultBtn" id="submitButton">Salva</button>
+                <button type="reset" class="defaultBtn" style="margin-top: 10px">Reset</button>
             </form>
         </div>
     </div>
@@ -298,56 +562,40 @@
 
 <style>
     .container {
-        margin-top: 50px;
+        margin: 0 auto;
     }
 
-    .row {
-        text-align: center;
-    }
-    
-    .col {
-        text-align: left;
+    .col{
+        border: 1px solid lightgray;
+        background-color: white;
+        padding: 10px;
         display: flex;
-        /* flex-direction: column; */
         justify-content: center;
     }
-    
+
     form {
-        background-color: whitesmoke;
-        padding: 20px;
-        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        width: 30%;
     }
 
-    input[type="text"], select {
-        height: 40px;
-    }
-
-    button[type="submit"] {
-        border: 1px solid lightgray;
-        color: black;
-        background-color: white;
-        border-radius: 35px;
-        height: 50px;
-    }
-
-    button[type="submit"]:hover {
-        outline: 1px solid lightgray;
-        background-color: #5cb85c;
-        color: white;
-    }
-
-    a {
-        text-decoration: none;
-        border: 1px solid darkgray;
+    #startMinute, #startHour, #endMinute, #endHour {
+        margin-top: 5px;
+        border-radius: 0.375rem;
+        border-color: #dee2e6;
         padding: 5px;
     }
 
-    #dates {
-        display: none;
+    button[type="submit"], button[type="reset"] {
+        height: 40px;
     }
 </style>
 
 <script>
+if ( selectedFlag === "ALL") {
+    document.getElementById("startDate").style.display = "none";
+    document.getElementById("endDate").style.display = "none";
+}
 // Data dinamica ad oggi per gli input date
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('startDate').setAttribute('min', today);
@@ -397,10 +645,13 @@ function showDates(){
     var selectedFlag = document.getElementById("flag").value;
 
     if ( selectedFlag === "GIORNO" ) {
-        document.getElementById("dates").style.display = "flex";
-        document.getElementById("dates").style.flexDirection = "column";
-    } else {
-        document.getElementById("dates").style.display = "none";
+        document.getElementById("startDate").style.display = "flex";
+        document.getElementById("startDate").style.flexDirection = "column";
+        document.getElementById("endDate").style.display = "flex";
+        document.getElementById("endDate").style.flexDirection = "column";
+    } else if ( selectedFlag === "ALL") {
+        document.getElementById("startDate").style.display = "none";
+        document.getElementById("endDate").style.display = "none";
     }
 }
 
