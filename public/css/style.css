@@ -1,12 +1,7 @@
-body {
-    align-items: center;
-    text-align: left;
-}
-
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], select, input[type="number"] {
     border: 1px solid darkgray;
-    border-radius: 5px;
-    height: 30px;
+    border-radius: 10px;
+    height: 35px;
     padding: 5px;
 }
 

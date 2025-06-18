@@ -12,8 +12,10 @@ class Queues extends Model
     protected $table = "queues";
 
     protected $fillable = [
+        "id",
         "servizio",
         "coda",
-        "tipologia"
+        "tipologia",
+        "skillGroup"
     ];
 }

@@ -27,6 +27,7 @@ class QueuesController extends Controller
         $queue->servizio = $request->input('service');
         $queue->coda = $request->input('queue');
         $queue->tipologia = $request->input('type');
+        $queue->skillGroup = $request->input('skillGroup');
 
         // Salvataggio
         $queue->save();
@@ -36,29 +37,26 @@ class QueuesController extends Controller
     }
 
     // Pagina di modifica coda
-    public function edit(string $servizio) {
-        $queue = Queues::where('servizio', $servizio)->firstOrFail();
+    public function edit(string $id) {
+        $queue = Queues::find($id);
         return view('queues.edit', compact('queue'));
     }
 
     // Aggiornamento coda
-    public function update(Request $request, string $servizio){
-    $queue = Queues::where('servizio', $servizio)->firstOrFail();
+    public function update(Request $request, string $id){
+        $queue = Queues::find($id);
+                
+        $queue->servizio = $request->input('service');
+        $queue->coda = $request->input('queue');
+        $queue->tipologia = $request->input('type');
+        $queue->skillGroup = $request->input('skillGroup');
+        
+        $queue->update($request->all());
 
-    // Salva il valore prima della modifica
-    $originalServizio = $queue->servizio;
-
-    $queue->servizio = $request->input('service');
-    $queue->coda = $request->input('queue');
-    $queue->tipologia = $request->input('type');
-    $queue->specializzazione = $request->input('skillGroup');
-
-    $queue->save();
-
-    return redirect()
-        ->route('queues.edit', $queue->servizio) // ora che è aggiornato
-        ->with('queueUpdated', 'Coda modificata e aggiornata');
-}
+        return redirect()
+            ->route('queues.edit', $queue->servizio) // ora che è aggiornato
+            ->with('queueUpdated', 'Coda modificata e aggiornata');
+    }
 
 
 
