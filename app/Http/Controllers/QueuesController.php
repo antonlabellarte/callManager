@@ -33,7 +33,7 @@ class QueuesController extends Controller
         $queue->save();
 
         //return redirect()->route('orders.create')->with('success', 'Part update successfully');
-        return back()->with('success', 'Part update successfully');
+        return redirect()->route('queues.index')->with('success', 'Coda inserita');
     }
 
     // Pagina di modifica coda
@@ -53,9 +53,7 @@ class QueuesController extends Controller
         
         $queue->update($request->all());
 
-        return redirect()
-            ->route('queues.edit', $queue->servizio) // ora che è aggiornato
-            ->with('queueUpdated', 'Coda modificata e aggiornata');
+        return back()->with('updated', 'aggiornato');
     }
 
 
@@ -65,6 +63,6 @@ class QueuesController extends Controller
         $queue = Queues::find($id);
         $queue->delete();
         
-        return redirect()->route('orders.index')->with('queueDeleted', 'Ordine eliminato');
+        return redirect()->route('queues.index')->with('queueDeleted', 'Ordine eliminato');
     }
 }

@@ -39,7 +39,6 @@ Route::post('/queues/storing', QueuesController::class .'@store')->name('queues.
 Route::get('/queues/{servizio}/edit', QueuesController::class .'@edit')->name('queues.edit')->middleware('auth');
 // Aggiorna campagna regola (update)
 Route::put('/queues/{servizio}/updating', QueuesController::class .'@update')->name('queues.update')->middleware('auth');
-
 // Elimina coda (delete)
 Route::delete('/queues/{id}', QueuesController::class . '@destroy')->name('queues.destroy')->middleware('auth');
 
