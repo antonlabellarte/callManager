@@ -48,7 +48,7 @@ Route::get('/campaignsrules/list', CampaignsRulesController::class .'@index')->n
 // Nuova campagna regola (create)
 Route::get('/campaignrules/create', CampaignsRulesController::class .'@create')->name('campaignsrules.create')->middleware('auth');
 // Nuova campagna regola (insert)
-Route::get('/campaignrules/storing', CampaignsRulesController::class .'@store')->name('campaignsrules.store')->middleware('auth');
+Route::post('/campaignrules/storing', CampaignsRulesController::class .'@store')->name('campaignsrules.store')->middleware('auth');
 // Dettagli campagna regola
 Route::get('campaignrules/details', CampaignsRulesController::class .'@details')->name('campaignrules.details')->middleware('auth');
 // Modifica campagna regola (edit)

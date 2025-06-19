@@ -12,13 +12,15 @@ class CampaignsRules extends Model
     protected $table = 'campagneregole';
 
     protected $fillable = [
-        "idCampagna",
+        "id",
         "testo",
         "coda",
+        "forzaCoda",
         "abbattimento",
         "nomeCampagna",
         "dataInizio",
         "dataFine",
-        "allCustomer"
+        "allCustomer",
+        "enabled"
     ];
 }

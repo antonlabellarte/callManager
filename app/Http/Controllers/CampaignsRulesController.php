@@ -24,6 +24,20 @@ class CampaignsRulesController extends Controller
     
     public function store(Request $request){
         $rule = new CampaignsRules();
+
+        $rule->testo = $request->input('testo');
+        $rule->coda = $request->input('coda');
+        $rule->forzaCoda = $request->input('forzaCoda');
+        $rule->abbattimento = $request->boolean('abbattimento'); // Laravel lo gestisce per te
+        $rule->nomeCampagna = $request->input('nomeCampagna');
+        $rule->dataInizio = $request->input('dataInizio');
+        $rule->dataFine = $request->input('dataFine');
+        $rule->allCustomer = $request->boolean('allCustomer');
+        $rule->enabled = $request->boolean('enabled');
+
+        $rule->save();
+
+        return redirect()->route('campaignsrules.index')->with('success', 'Coda inserita');
     }
 
     
