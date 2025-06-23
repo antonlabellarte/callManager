@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Maatwebsite\Excel\Facades\Excel;
-use App\Models\CampaignsLists;
+use App\Models\CustomersList;
 use Illuminate\Http\Request;
 use App\Imports\ContrattiImport;
 
-class CampaignsListsController extends Controller
+class CustomersListController extends Controller
 {
 
     public function index(){
-        // $campaigns = CampaignsLists::paginate(10);
+        // $campaigns = CustomersList::paginate(10);
 
         // return view('campaigns.index', compact('campaigns'));
     }
@@ -51,7 +51,7 @@ class CampaignsListsController extends Controller
 
     
     public function destroy(string $id){
-        // $campaignlist = CampaignsLists::find($id);
+        // $campaignlist = CustomersList::find($id);
         // $campaignlist->delete();
         
         // return back()->with('erased', 'Campaign list deleted');
