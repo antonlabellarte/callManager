@@ -1,7 +1,9 @@
 body {
     background-image: url('../css/waves.jpg');
-    background-size: cover;
     background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 input[type="text"], input[type="password"], select, input[type="number"] {

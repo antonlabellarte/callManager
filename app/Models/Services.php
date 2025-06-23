@@ -5,14 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CampaignsLists extends Model
+class Services extends Model
 {
     use HasFactory;
 
-    protected $table = "campagneliste";
+    protected $table = "services";
 
     protected $fillable = [
         "id",
-        "regolaid"
+        "servizio",
+        "coda",
+        "tipologia",
+        "skillGroup"
     ];
 }

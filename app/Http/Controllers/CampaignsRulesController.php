@@ -2,28 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CampaignsRules;
+use App\Models\Campaigns;
 use App\Models\CampaignsLists;
 use Illuminate\Http\Request;
 
-class CampaignsRulesController extends Controller
+class CampaignsController extends Controller
 {
     public function index(){
         // $campaigns = CampaignsLists::paginate(10);
-        $campaignsRules = CampaignsRules::all();
+        $campaigns = Campaigns::all();
 
-        return view('campaignsrules.index', compact('campaignsRules'));
+        return view('campaigns.index', compact('campaigns'));
 
         // return view('campaigns.index', compact('campaigns'));
     }
 
     public function create(){
-        return view('campaignsrules.add');
+        return view('campaigns.add');
     }
 
     
     public function store(Request $request){
-        $rule = new CampaignsRules();
+        $rule = new Campaigns();
 
         $rule->testo = $request->input('testo');
         $rule->coda = $request->input('coda');
@@ -37,14 +37,14 @@ class CampaignsRulesController extends Controller
 
         $rule->save();
 
-        return redirect()->route('campaignsrules.index')->with('success', 'Coda inserita');
+        return redirect()->route('campaigns.index')->with('success', 'Coda inserita');
     }
 
     
     public function edit(string $id){
-        $rule = CampaignsRules::find($id);
+        $rule = Campaigns::find($id);
 
-        return view('campaignsrules.edit', compact('rule',));
+        return view('campaigns.edit', compact('rule',));
     }
 
     
@@ -54,7 +54,7 @@ class CampaignsRulesController extends Controller
 
     
     public function destroy(string $id){
-        $campaignrule = CampaignsRules::find($id);
+        $campaignrule = Campaigns::find($id);
         $campaignrule->delete();
         
         return back()->with('erased', 'Campaign rule deleted');
@@ -62,13 +62,13 @@ class CampaignsRulesController extends Controller
 
     public function details(string $id)
     {
-        $rule = CampaignsRules::find($id);
+        $rule = Campaigns::find($id);
 
         // Recupera tutte le liste collegate a questa regola
         $listsPerRule = CampaignsLists::where('regoleid', $id)->get();
 
         // Passa sia la regola che le liste alla view
-        return view('campaignsrules.details', compact('rule', 'listsPerRule'));
+        return view('campaigns.details', compact('rule', 'listsPerRule'));
 }
 
 }

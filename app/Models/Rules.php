@@ -12,18 +12,19 @@ class Rules extends Model
     protected $table = "rules";
 
     protected $fillable = [
-        "servizio",
-        "data_iniziale",
-        "data_finale",
+        "id",
+        "servizioPartizionato",
+        "dataInizio",
+        "dataFine",
         "flag",
-        "ora_iniziale",
-        "ora_finale",
-        "coda_uno",
-        "partizione_uno",
-        "coda_due",
-        "partizione_due",
-        "coda_tre",
-        "partizione_tre",
+        "oraInizio",
+        "oraFine",
+        "servizioUno",
+        "percentualeUno",
+        "servizioDue",
+        "percentualeDue",
+        "servizioTre",
+        "percentualeTre",
         "created_at",
         "updated_at"
     ];

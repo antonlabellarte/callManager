@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\CampaignsRulesController;
-use App\Http\Controllers\QueuesController;
+use App\Http\Controllers\CampaignsController;
+use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\RulesControllers;
 
 // Schermata di login
@@ -30,33 +30,33 @@ Route::delete('/rules/{id}', RulesControllers::class . '@destroy')->name('rules.
 
 /* Code */
 // Lista code
-Route::get('/queues/list', QueuesController::class .'@index')->name('queues.index')->middleware('auth');
+Route::get('/services/list', ServicesController::class .'@index')->name('services.index')->middleware('auth');
 // Nuove coda (create)
-Route::get('/queues/create', QueuesController::class .'@create')->name('queues.create')->middleware('auth');
+Route::get('/services/create', ServicesController::class .'@create')->name('services.create')->middleware('auth');
 // Nuova coda (insert)
-Route::post('/queues/storing', QueuesController::class .'@store')->name('queues.store')->middleware('auth');
+Route::post('/services/storing', ServicesController::class .'@store')->name('services.store')->middleware('auth');
 // Modifica coda (form)
-Route::get('/queues/{servizio}/edit', QueuesController::class .'@edit')->name('queues.edit')->middleware('auth');
+Route::get('/services/{servizio}/edit', ServicesController::class .'@edit')->name('services.edit')->middleware('auth');
 // Aggiorna campagna regola (update)
-Route::put('/queues/{servizio}/updating', QueuesController::class .'@update')->name('queues.update')->middleware('auth');
+Route::put('/services/{servizio}/updating', ServicesController::class .'@update')->name('services.update')->middleware('auth');
 // Elimina coda (delete)
-Route::delete('/queues/{id}', QueuesController::class . '@destroy')->name('queues.destroy')->middleware('auth');
+Route::delete('/services/{id}', ServicesController::class . '@destroy')->name('services.destroy')->middleware('auth');
 
 /* Campagne */
 // Campagne Regola
-Route::get('/campaignsrules/list', CampaignsRulesController::class .'@index')->name('campaignsrules.index')->middleware('auth');
+Route::get('/campaigns/list', CampaignsController::class .'@index')->name('campaigns.index')->middleware('auth');
 // Nuova campagna regola (create)
-Route::get('/campaignrules/create', CampaignsRulesController::class .'@create')->name('campaignsrules.create')->middleware('auth');
+Route::get('/campaignrules/create', CampaignsController::class .'@create')->name('campaigns.create')->middleware('auth');
 // Nuova campagna regola (insert)
-Route::post('/campaignrules/storing', CampaignsRulesController::class .'@store')->name('campaignsrules.store')->middleware('auth');
+Route::post('/campaignrules/storing', CampaignsController::class .'@store')->name('campaigns.store')->middleware('auth');
 // Dettagli campagna regola
-Route::get('campaignrules/details', CampaignsRulesController::class .'@details')->name('campaignrules.details')->middleware('auth');
+Route::get('campaignrules/details', CampaignsController::class .'@details')->name('campaignrules.details')->middleware('auth');
 // Modifica campagna regola (edit)
-Route::get('campaignrules/edit', CampaignsRulesController::class .'@edit')->name('campaignrules.edit')->middleware('auth');
+Route::get('campaignrules/edit', CampaignsController::class .'@edit')->name('campaignrules.edit')->middleware('auth');
 // Aggiorna campagna regola (update)
-Route::put('/campaignrules/{id}', CampaignsRulesController::class . '@update')->name('campaignrules.update')->middleware('auth');
+Route::put('/campaignrules/{id}', CampaignsController::class . '@update')->name('campaignrules.update')->middleware('auth');
 // Elimina regola (delete)
-Route::delete('/campaignrules/{id}', CampaignsRulesController::class . '@destroy')->name('campaignsrules.destroy')->middleware('auth');
+Route::delete('/campaignrules/{id}', CampaignsController::class . '@destroy')->name('campaigns.destroy')->middleware('auth');
 
 // Importa campagne tramite Excel
-Route::post('/import-excel', CampaignsRulesController::class .'@import')->name('import.excel')->middleware('auth');
+Route::post('/import-excel', CampaignsController::class .'@import')->name('import.excel')->middleware('auth');

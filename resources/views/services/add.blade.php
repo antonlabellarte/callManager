@@ -5,7 +5,7 @@
     <h3 style="margin-top: 20px;">Nuova coda</h3>
     <div class="row" style="text-align: center;">
         <div class="col">
-            <form action="{{ route('queues.store') }}" method="POST">
+            <form action="{{ route('services.store') }}" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Servizio</label>
