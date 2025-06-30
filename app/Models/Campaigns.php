@@ -9,7 +9,7 @@ class Campaigns extends Model
 {
     use HasFactory;
 
-    protected $table = 'campagneregole';
+    protected $table = 'campaign';
 
     protected $fillable = [
         "id",

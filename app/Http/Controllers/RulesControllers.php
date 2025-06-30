@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Rules;
-use App\Models\Queues;
+use App\Models\Services;
 
 class RulesControllers extends Controller
 {
@@ -21,10 +21,10 @@ class RulesControllers extends Controller
     public function create(){
 
         // Servizio dove tipologia = principale
-        $servicesPrincipali = Queues::where('tipologia', 'principale')->get();
+        $servicesPrincipali = Services::where('typology', 'principale')->get();
 
-        // Servizio dove tipologia = partizione
-        $servicesPartizionati = Queues::where('tipologia', 'secondaria')->get();
+        // Servizio dove typology = partizione
+        $servicesPartizionati = Services::where('typology', 'secondaria')->get();
 
         return view('rules.add', compact('servicesPrincipali', 'servicesPartizionati'));
     }

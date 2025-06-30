@@ -50,11 +50,11 @@ Route::get('/campaignrules/create', CampaignsController::class .'@create')->name
 // Nuova campagna regola (insert)
 Route::post('/campaignrules/storing', CampaignsController::class .'@store')->name('campaigns.store')->middleware('auth');
 // Dettagli campagna regola
-Route::get('campaignrules/details', CampaignsController::class .'@details')->name('campaignrules.details')->middleware('auth');
+Route::get('campaignrules/details', CampaignsController::class .'@details')->name('campaigns.details')->middleware('auth');
 // Modifica campagna regola (edit)
-Route::get('campaignrules/edit', CampaignsController::class .'@edit')->name('campaignrules.edit')->middleware('auth');
+Route::get('campaignrules/edit', CampaignsController::class .'@edit')->name('campaigns.edit')->middleware('auth');
 // Aggiorna campagna regola (update)
-Route::put('/campaignrules/{id}', CampaignsController::class . '@update')->name('campaignrules.update')->middleware('auth');
+Route::put('/campaignrules/{id}', CampaignsController::class . '@update')->name('campaigns.update')->middleware('auth');
 // Elimina regola (delete)
 Route::delete('/campaignrules/{id}', CampaignsController::class . '@destroy')->name('campaigns.destroy')->middleware('auth');
 

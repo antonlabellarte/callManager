@@ -39,7 +39,7 @@ class ServicesController extends Controller
     // Pagina di modifica coda
     public function edit(string $id) {
         $service = Services::find($id);
-        return view('services.edit', compact('queue'));
+        return view('services.edit', compact('service'));
     }
 
     // Aggiornamento coda
