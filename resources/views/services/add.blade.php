@@ -2,10 +2,19 @@
 @include('navbar')
 
 <div class="container">
-    <h3 style="margin-top: 20px;">Nuova coda</h3>
+    <div class="alert alert-light" role="alert" style="margin-top: 20px; border-color: black; color: black;">
+        Nuova coda
+    </div><br>
+    @if (session('warning'))
+        <div class="alert alert-danger" role="alert" style="margin-top: 20px; border-color: black; color: black;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/></svg>
+            Attenzione<br>
+            È stato trovata una coda o servizio già esistente
+        </div><br>
+    @endif
     <div class="row" style="text-align: center;">
         <div class="col">
-            <form action="{{ route('services.store') }}" method="POST" onsubmit >
+            <form action="{{ route('services.store') }}" method="POST" onsubmit="return validateService()">
                 @csrf
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Servizio</label>
@@ -13,7 +22,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Coda</label>
-                    <input type="number" class="form-control" name="queue" id="queue">
+                    <input type="number" class="form-control" name="queue" id="queue" maxlength="4">
                     <small>
                         <i>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg>
@@ -39,6 +48,14 @@
                             <option value="Specializzazione 2">Specializzazione 2</option>
                             <option value="Specializzazione 3">Specializzazione 3</option>
                     </select>
+                </div>
+                <div id="validationAlert" class="alert alert-danger" role="alert">
+                    <span style="float: left; margin-right: 10px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/></svg>
+                    </span>
+                    <span id="validationAlertText" style="float: center;">
+                        <!-- Testo -->                        
+                    </span>
                 </div>
                 <div class="mb-3" style="display: flex; flex-direction: row;">
                     <button type="submit" style="width: 60%; border-radius: 10px; margin-right: 10px;">
@@ -67,8 +84,46 @@
 
 <script>
     function validateService() {
+        let service = document.getElementById('service').value;
+        let queue = document.getElementById('queue').value;
+        let tipology = document.getElementById('tipology').value;
+        let skillGroup = document.getElementById('skillGroup').value;
 
+        document.getElementById("service").style.borderColor = "lightgray";
+        document.getElementById("queue").style.borderColor = "lightgray";
+        document.getElementById("tipology").style.borderColor = "lightgray";
+        document.getElementById("skillGroup").style.borderColor = "lightgray";
+
+        if ( service == "" ) {
+            document.getElementById("validationAlert").style.display = "block";
+            document.getElementById("validationAlertText").style.display = "block"
+            document.getElementById("validationAlertText").innerText = "Il servizio dev'essere obbligatorio"
+            document.getElementById("service").style.borderColor = "red";
+
+            return false;
+        } else if ( queue == "" ) {
+            document.getElementById("validationAlert").style.display = "block";
+            document.getElementById("validationAlertText").style.display = "block"
+            document.getElementById("validationAlertText").innerText = "La coda dev'essere obbligatoria"
+            document.getElementById("queue").style.borderColor = "red";
+            return false;
+        } else if( tipology == "" ) {
+            document.getElementById("validationAlert").style.display = "block";
+            document.getElementById("validationAlertText").style.display = "block";
+            document.getElementById("validationAlertText").innerText = "La tipologia dev'essere obbligatoria"
+            document.getElementById("tipology").style.borderColor = "red";
+            return false;
+        } else if( skillGroup == "" ) {
+            document.getElementById("validationAlert").style.display = "block";
+            document.getElementById("validationAlertText").style.display = "block"
+            document.getElementById("validationAlertText").innerText = "La specializzazione dev'essere obbligatoria"
+            document.getElementById("skillGroup").style.borderColor = "red";
+            return false;
+        } else {
+            return true;
+        }
     }
+
     function fillSkillGroup(){
         var skillGroupSelected = document.getElementById('skillGroupSelect').value;
         if( skillGroupSelected != "" ) {
@@ -108,6 +163,10 @@
     form button {
         width: 70%;
         text-align: center;
+    }
+
+    #validationAlert, #validationAlertText{
+        display: none;
     }
 
     /* Form media query mobile */

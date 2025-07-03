@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Services;
+use App\Models\Rules;
+use App\Models\Campaigns;
 
 class ServicesController extends Controller
 {
@@ -26,14 +28,26 @@ class ServicesController extends Controller
         
         $service->name = $request->input('service');
         $service->queue = $request->input('queue');
-        $service->typology = $request->input('type');
+        $service->typology = $request->input('typology');
         $service->skillGroup = $request->input('skillGroup');
+        
+        // Query servizio esistente
+        $existentService = Services::where('name', $request->input('service'))->get();
 
-        // Salvataggio
-        $service->save();
+        // Query coda esistente
+        $existentQueue = Services::where('queue', $request->input('queue'))->get();
 
-        //return redirect()->route('orders.create')->with('success', 'Part update successfully');
-        return redirect()->route('services.index')->with('success', 'Coda inserita');
+        // Se non sono vuote
+        if( $existentQueue->isNotEmpty() || $existentService->isNotEmpty()) {
+            return redirect()->back()->with('warning', 'trovate');
+        } else {
+            // Salvataggio
+            $service->save();
+            
+            //return redirect()->route('orders.create')->with('success', 'Part update successfully');
+            return redirect()->route('services.index')->with('success', 'Coda inserita');
+        }
+        
     }
 
     // Pagina di modifica coda
@@ -48,11 +62,29 @@ class ServicesController extends Controller
                 
         $service->name = $request->input('service');
         $service->queue = $request->input('queue');
-        $service->typology = $request->input('type');
+        $service->typology = $request->input('typology');
         $service->skillGroup = $request->input('skillGroup');
+
+        $existentRule = Rules::where('ServizioPartizionato', $request->input('service'))
+            ->orWhere('Servizio1',  $request->input('service'))
+            ->orWhere('Servizio2',  $request->input('service'))
+            ->orWhere('Servizio3',  $request->input('service'))
+            ->get();
+
+        // Se non esistono regole
+        if($existentRule->isNotEmpty()) {
+            return back()->with('warning', '');    
+            
+            // Se esistono regole
+        } else {
+            $existentCampaign = Campaigns::where('name', $request->input('service'));
+
+            if($existentCampaign->isNotEmpty()){
+
+            }
+        }
         
         $service->update($request->all());
-
         return back()->with('updated', 'aggiornato');
     }
 

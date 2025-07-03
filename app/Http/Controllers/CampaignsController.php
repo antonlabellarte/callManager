@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Campaigns;
-use App\Models\CampaignsLists;
+use App\Models\Services;
+use App\Models\CustomersList;
 use Illuminate\Http\Request;
 
 class CampaignsController extends Controller
 {
     public function index(){
-        // $campaigns = CampaignsLists::paginate(10);
+        // $campaigns = CustomersList::paginate(10);
         $campaigns = Campaigns::all();
 
         return view('campaigns.index', compact('campaigns'));
@@ -18,7 +19,8 @@ class CampaignsController extends Controller
     }
 
     public function create(){
-        return view('campaigns.add');
+        $queues = Services::all();
+        return view('campaigns.add', compact('queues'));
     }
 
     
@@ -44,7 +46,9 @@ class CampaignsController extends Controller
     public function edit(string $id){
         $rule = Campaigns::find($id);
 
-        return view('campaigns.edit', compact('rule',));
+        $queues = Services::all();
+
+        return view('campaigns.edit', compact('rule', 'queues'));
     }
 
     
@@ -65,7 +69,7 @@ class CampaignsController extends Controller
         $rule = Campaigns::find($id);
 
         // Recupera tutte le liste collegate a questa regola
-        $listsPerRule = CampaignsLists::where('regoleid', $id)->get();
+        $listsPerRule = CustomersList::where('regoleid', $id)->get();
 
         // Passa sia la regola che le liste alla view
         return view('campaigns.details', compact('rule', 'listsPerRule'));

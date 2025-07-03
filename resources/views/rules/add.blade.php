@@ -1,9 +1,10 @@
 @include('partials.top')
 @include('navbar')
 <div class="container">
+    <div class="alert alert-light" role="alert" style="margin-top: 20px; border-color: black; color: black;">
+        Nuova regola
+    </div>
     <div class="row">
-        <h4 style="margin-top: 10px;">Nuova regola</h4><br>
-
         @if (session('success'))
             <div class="alert alert-success" role="alert">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0a3622" class="bi bi-check-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/></svg>
@@ -314,7 +315,7 @@
 
 <style>
     .container {
-        margin: 0 auto;
+        text-align: center;
     }
 
     .col{
@@ -326,6 +327,7 @@
     }
 
     form {
+        text-align: left;
         display: flex;
         flex-direction: column;
         width: 30%;        

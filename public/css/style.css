@@ -1,9 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 body {
-    background-image: url('../css/waves.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background: lightgray;
+
+    font-family: "Montserrat", sans-serif;
 }
 
 input[type="text"], input[type="password"], select, input[type="number"] {

@@ -28,7 +28,7 @@
 
 <div class="container">
     <div class="row">
-        <h3 style="color: white; -webkit-text-stroke: 1px black;">
+        <h3>
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16"><path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9q-.13 0-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/><path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4 4 0 0 1-.82 1H12a3 3 0 1 0 0-6z"/></svg>
             Code
         </h3><br>
@@ -46,6 +46,22 @@
             </span>
         </div>
         @endif
+
+        @if (session('updated'))
+            <div id="successAlert" class="alert alert-success" role="alert" style="width: 300px; margin: 0 auto;">
+                <span style="float: left;">
+                    Coda aggiornata
+                </span>
+                <span style="float: right;">
+                    <button onclick="closeAlert()" style="border: transparent; background-color: transparent;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                    </svg>
+                    </button>
+                </span>
+            </div><br>
+        @endif
+
         @if (session('serviceDeleted'))
         <div id="successAlert" class="alert alert-danger" role="alert" style="width: 300px; margin: 0 auto;">
             <span style="float: left;">
@@ -66,7 +82,7 @@
                     Aggiungi nuova coda
             </a>
             @if (count($services) > 0)
-                <p style="float: right; color: white; -webkit-text-stroke: 1px black;">
+                <p style="float: right;">
                     Code totali presenti: <strong>{{ $services->count() }}</strong>
                 </p>
             @endif<br>
