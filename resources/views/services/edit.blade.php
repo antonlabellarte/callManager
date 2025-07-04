@@ -2,16 +2,37 @@
 @include('navbar')
 
 <div class="container">
+    <!-- Alert boxes -->
     @if (session('updated'))
     <div class="alert alert-success" role="alert" style="margin-top: 20px;">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
         Coda # {{ $service->id }} aggiornata
     </div><br>
-    @else
+    @endif
+
+    @if (session('ruleFound') || session('campaignFound') || session('queueFound') || session('serviceFound') )
+    <div class="alert alert-danger" role="alert" style="margin-top: 20px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
+        @if (session('ruleFound'))
+            Regola
+        @endif
+        @if (session('campaignFound'))
+            Campagna
+        @endif
+        @if (session('queueFound'))
+            Coda
+        @endif
+        @if (session('serviceFound'))
+            Servizio
+        @endif
+        esistente.
+    </div><br>
+    @endif
+
+    <!-- Pagina -->
     <div class="alert alert-light" role="alert" style="margin-top: 20px; border-color: black; color: black;">
         <b>Modifica coda ID: # {{ $service->id }}</b>
     </div>
-    @endif
     
     <div class="row" style="text-align: center;">
         <div class="col" style="margin-top: 10px;">

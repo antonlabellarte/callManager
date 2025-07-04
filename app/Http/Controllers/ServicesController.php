@@ -66,26 +66,37 @@ class ServicesController extends Controller
         $service->skillGroup = $request->input('skillGroup');
 
         $existentRule = Rules::where('ServizioPartizionato', $request->input('service'))
-            ->orWhere('Servizio1',  $request->input('service'))
-            ->orWhere('Servizio2',  $request->input('service'))
-            ->orWhere('Servizio3',  $request->input('service'))
+            ->orWhere('servizioUno',  $request->input('service'))
+            ->orWhere('servizioDue',  $request->input('service'))
+            ->orWhere('servizioTre',  $request->input('service'))
             ->get();
-
+            
         // Se non esistono regole
         if($existentRule->isNotEmpty()) {
-            return back()->with('warning', '');    
+            return back()->with('ruleFound', '');
             
             // Se esistono regole
         } else {
-            $existentCampaign = Campaigns::where('name', $request->input('service'));
+            $existentCampaign = Campaigns::where('queue', $request->input('queue'))->get();
 
             if($existentCampaign->isNotEmpty()){
+                return back()->with('campaignFound', 'Campagna trovata');
+            } else {
+                // Controlla se c'è una coda/servizio
+                $existentQueue = Services::where('queue', $request->input('queue'))->get();
+                $existentService = Services::where('name', $request->input('service'))->get();
 
+                if( $existentQueue->isNotEmpty() ) {
+                    return back()->with('queueFound', 'Coda trovata');
+                } else if ( $existentService->IsNotEmpty() ) {
+                    return back()->with('serviceFound', 'Servizio trovato');
+                }  else {
+                    // Coda aggiornata
+                    $service->update($request->all());
+                    return back()->with('updated', 'Servizio aggiornato');
+                }
             }
-        }
-        
-        $service->update($request->all());
-        return back()->with('updated', 'aggiornato');
+        }    
     }
 
 

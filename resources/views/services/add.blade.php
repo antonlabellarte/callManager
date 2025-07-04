@@ -32,7 +32,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Tipologia</label>
-                    <select class="form-select" name="tipology" id="tipology">
+                    <select class="form-select" name="typology" id="typology">
                             <option value=""></option>
                             <option value="principale">Principale</option>
                             <option value="secondaria">Secondaria</option>

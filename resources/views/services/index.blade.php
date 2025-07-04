@@ -33,7 +33,7 @@
             Code
         </h3><br>
         @if (session('success'))
-        <div id="successAlert" class="alert alert-success" role="alert" style="width: 300px; margin: 0 auto;">
+        <div id="successAlert" class="alert alert-success" role="alert" style="width: 300px; margin: 0 auto; margin-bottom: 10px;">
             <span style="float: left;">
                 Coda inserita
             </span>
