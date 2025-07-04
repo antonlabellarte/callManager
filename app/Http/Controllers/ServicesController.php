@@ -102,10 +102,30 @@ class ServicesController extends Controller
 
 
     // Eliminazione coda
-    public function destroy(string $id){
+    public function destroy(Request $request, string $id){
         $service = Services::find($id);
-        $service->delete();
+
+        $serviceA = $request->input('service');
         
-        return redirect()->route('services.index')->with('serviceDeleted', 'Ordine eliminato');
+
+        $existentRule = Rules::query()
+            ->where('servizioPartizionato', $request->input('service'))
+            ->orWhere('servizioUno', $request->input('service'))
+            ->orWhere('servizioDue', $request->input('service'))
+            ->orWhere('servizioTre', $request->input('service'))
+            ->get();
+        
+        if ( $existentRule->isNotEmpty() ) {
+            return back()->with('ruleFound', 'Regola trovata');
+        } else {
+            $existentCampaign = Campaigns::where('queue', $request->input('queue'))->get();
+
+            if ( $existentCampaign->isNotEmpty()) {
+                return back()->with('campaignFound', 'Campagna trovata');
+            } else {
+                $service->delete();
+                return redirect()->route('services.index')->with('serviceDeleted', 'Ordine eliminato');
+            }
+        }
     }
 }

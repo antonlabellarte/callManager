@@ -146,9 +146,8 @@ class RulesControllers extends Controller
 
     
     public function destroy(string $id){
-        $rule = Rules::find($id);
-        $rule->delete();
-        
+        $rule = Rules::find($id);       
+        $rule->delete();        
         return back()->with('erased', 'Rule deleted');
     }
 }

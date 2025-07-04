@@ -12,11 +12,15 @@
                 </div>
                 <div class="modal-body" style="font-weight: bold;">
                 Sei sicuro di voler eliminare la coda {{ $service->name }}?
-                </div>
-                <div class="modal-footer">
-                    <form action="{{ route('services.destroy', $service->id )}}" method="POST">
-                        @csrf
-                        @method('DELETE')
+            </div>
+            <div class="modal-footer">
+                <form action="{{ route('services.destroy', $service->id )}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                        <!-- Name da passare alla funzione -->
+                        <input type="hidden" id="service" name="service" value="{{ $service->name }}">
+                        <!-- Queue da passare alla funzione -->
+                        <input type="hidden" id="queue" name="queue" value="{{ $service->queue }}">
                         <button type="submit" class="modalConfirmBtn">Elimina</button>
                         <button type="button" class="modalDeleteBtn" data-bs-dismiss="modal">Annulla</button>
                     </form>
@@ -47,8 +51,21 @@
         </div>
         @endif
 
+        @if (session('ruleFound') || session('campaignFound'))
+        <div class="alert alert-danger" role="alert" style="margin-bottom: 10px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
+            @if (session('ruleFound'))
+                Regola
+            @endif
+            @if (session('campaignFound'))
+                Campagna
+            @endif
+            associata esistente.
+        </div><br>
+        @endif
+
         @if (session('updated'))
-            <div id="successAlert" class="alert alert-success" role="alert" style="width: 300px; margin: 0 auto;">
+            <div id="successAlert" class="alert alert-success" role="alert" style="width: 300px; margin: 0 auto; margin-bottom: 10px;">
                 <span style="float: left;">
                     Coda aggiornata
                 </span>
@@ -63,7 +80,7 @@
         @endif
 
         @if (session('serviceDeleted'))
-        <div id="successAlert" class="alert alert-danger" role="alert" style="width: 300px; margin: 0 auto;">
+        <div id="successAlert" class="alert alert-success" role="alert" style="width: 300px; margin: 0 auto; margin-bottom: 10px;">
             <span style="float: left;">
                 Coda eliminata
             </span>
