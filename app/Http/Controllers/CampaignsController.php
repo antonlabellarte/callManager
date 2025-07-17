@@ -28,48 +28,52 @@ class CampaignsController extends Controller
     public function store(Request $request){
         $campaign = new Campaigns();
 
-        $campaign->testo = $request->input('testo');
-        $campaign->coda = $request->input('coda');
+        $campaign->message = $request->input('testo');
+        $campaign->queue = $request->input('coda');
         $campaign->toQueue = $request->input('toQueue');
-        $campaign->forzaCoda = $request->input('forzaCoda');
-        $campaign->abbattimento = $request->boolean('abbattimento');
-        $campaign->nomeCampagna = $request->input('nomeCampagna');
-        $campaign->dataInizio = $request->input('dataInizio');
-        $campaign->dataFine = $request->input('dataFine');
-        $campaign->allCustomer = $request->boolean('allCustomer');
-        $campaign->enabled = $request->boolean('enabled');
+        $campaign->dropCall = $request->boolean('abbattimento');
+        $campaign->name = $request->input('nomeCampagna');
+        $campaign->dateStart = $request->input('dataInizio');
+        $campaign->dateEnd = $request->input('dataFine');
+        $campaign->allCustomers = $request->boolean('allCustomer');
+        $campaign->enabled = $request->boolean('enabled');        
 
         
-        $existentCampaign = Campaign::where('message', $messagge)
-            ->where('coda', $request->input('coda'))
-            ->where('abbattimento', $request->boolean('abbattimento'))
-            ->where('nomeCampagna', $request->input('nomeCampagna'))
-            ->where('dataInizio', $request->input('dataInizio'))
-            ->where('dataFine', $request->input('dataFine'))
-            ->where('allCustomer', $request->boolean('allCustomer'))
+        $existentCampaign = Campaigns::where('message', $request->input('messaggio'))
+            ->where('queue', $request->input('coda'))
+            ->where('dropCall', $request->boolean('abbattimento'))
+            ->where('name', $request->input('nomeCampagna'))
+            ->where('dateStart', $request->input('dataInizio'))
+            ->where('dateEnd', $request->input('dataFine'))
+            ->where('allCustomers', $request->boolean('allCustomer'))
             ->where('enabled', $request->boolean('enabled'))
             ->where('toQueue', $request->input('toQueue'))
             ->get();
 
-        if ( $existentCampaing->isNotEmpty() ) {
+        if ( $existentCampaign->isNotEmpty() ) {
             return redirect()->back()->with('warning', 'Campagna uguale trovata');    
         } else {
-            $campaigns = Campaign::where(function ($query) use ($queue, $dateStart, $dateEnd) {
-                    $query->where(function ($q) use ($queue, $dateStart, $dateEnd) {
-                        $q->where(function ($subQ) use ($queue) {
-                            $subQ->where('queue', $queue)
-                                ->orWhere('queue', '0');
+            $queue = $request->input('coda');
+            $dateStart = $request->input('dataInizio');
+            $dateEnd = $request->input('dataFine');
+            $name = $request->input('nomeCampagna');
+
+            $overlap = Campaigns::where(function ($q) use ($queue, $dateStart, $dateEnd) {
+                    $q->where(function ($q2) use ($queue, $dateStart, $dateEnd) {
+                        $q2->where(function ($q3) use ($queue) {
+                            $q3->where('queue', $queue)
+                            ->orWhere('queue', '0');
                         })
-                        ->where(function ($subQ) use ($dateStart, $dateEnd) {
-                            $start = $dateStart ?? '2000-01-01 00:00:00';
-                            $end = $dateEnd ?? '2100-01-01 00:00:00';
-                            
-                            $subQ->where(function ($q2) use ($start, $end) {
-                                $q2->where('dateStart', '<=', $end)
+                        ->where(function ($q4) use ($dateStart, $dateEnd) {
+                            $start = $dateStart ?: '2000-01-01 00:00:00';
+                            $end = $dateEnd ?: '2100-01-01 00:00:00';
+
+                            $q4->where(function ($q5) use ($start, $end) {
+                                $q5->where('dateStart', '<=', $end)
                                 ->where('dateEnd', '>=', $start);
                             })
-                            ->orWhere(function ($q2) {
-                                $q2->whereNull('dateStart')
+                            ->orWhere(function ($q5) {
+                                $q5->whereNull('dateStart')
                                 ->whereNull('dateEnd');
                             });
                         })
@@ -77,12 +81,20 @@ class CampaignsController extends Controller
                         ->where('enabled', 1);
                     });
                 })
-                ->orWhere('name', $campaignName)
+                ->orWhere('name', $name)
                 ->get();
+
+            if ( $overlap->IsNotEmpty() ) {
+                // Non salva
+                return redirect()->back()->with('overlap', $overlap)->with('overlapFound', 'Accavallamento trovato');
+
+            } else {
+                // salva
+                $campaign->save();
+                return redirect()->route('campaigns.index')->with('success', 'Coda inserita');
+            }
         }
 
-        $campaign->save();
-        return redirect()->route('campaigns.index')->with('success', 'Coda inserita');
     }
 
     
