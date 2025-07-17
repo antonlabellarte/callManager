@@ -19,26 +19,69 @@ class CampaignsController extends Controller
     }
 
     public function create(){
-        $queues = Services::all();
+        $queues = Services::orderBy('queue', 'asc')->get();
+
         return view('campaigns.add', compact('queues'));
     }
 
     
     public function store(Request $request){
-        $rule = new Campaigns();
+        $campaign = new Campaigns();
 
-        $rule->testo = $request->input('testo');
-        $rule->coda = $request->input('coda');
-        $rule->forzaCoda = $request->input('forzaCoda');
-        $rule->abbattimento = $request->boolean('abbattimento'); // Laravel lo gestisce per te
-        $rule->nomeCampagna = $request->input('nomeCampagna');
-        $rule->dataInizio = $request->input('dataInizio');
-        $rule->dataFine = $request->input('dataFine');
-        $rule->allCustomer = $request->boolean('allCustomer');
-        $rule->enabled = $request->boolean('enabled');
+        $campaign->testo = $request->input('testo');
+        $campaign->coda = $request->input('coda');
+        $campaign->toQueue = $request->input('toQueue');
+        $campaign->forzaCoda = $request->input('forzaCoda');
+        $campaign->abbattimento = $request->boolean('abbattimento');
+        $campaign->nomeCampagna = $request->input('nomeCampagna');
+        $campaign->dataInizio = $request->input('dataInizio');
+        $campaign->dataFine = $request->input('dataFine');
+        $campaign->allCustomer = $request->boolean('allCustomer');
+        $campaign->enabled = $request->boolean('enabled');
 
-        $rule->save();
+        
+        $existentCampaign = Campaign::where('message', $messagge)
+            ->where('coda', $request->input('coda'))
+            ->where('abbattimento', $request->boolean('abbattimento'))
+            ->where('nomeCampagna', $request->input('nomeCampagna'))
+            ->where('dataInizio', $request->input('dataInizio'))
+            ->where('dataFine', $request->input('dataFine'))
+            ->where('allCustomer', $request->boolean('allCustomer'))
+            ->where('enabled', $request->boolean('enabled'))
+            ->where('toQueue', $request->input('toQueue'))
+            ->get();
 
+        if ( $existentCampaing->isNotEmpty() ) {
+            return redirect()->back()->with('warning', 'Campagna uguale trovata');    
+        } else {
+            $campaigns = Campaign::where(function ($query) use ($queue, $dateStart, $dateEnd) {
+                    $query->where(function ($q) use ($queue, $dateStart, $dateEnd) {
+                        $q->where(function ($subQ) use ($queue) {
+                            $subQ->where('queue', $queue)
+                                ->orWhere('queue', '0');
+                        })
+                        ->where(function ($subQ) use ($dateStart, $dateEnd) {
+                            $start = $dateStart ?? '2000-01-01 00:00:00';
+                            $end = $dateEnd ?? '2100-01-01 00:00:00';
+                            
+                            $subQ->where(function ($q2) use ($start, $end) {
+                                $q2->where('dateStart', '<=', $end)
+                                ->where('dateEnd', '>=', $start);
+                            })
+                            ->orWhere(function ($q2) {
+                                $q2->whereNull('dateStart')
+                                ->whereNull('dateEnd');
+                            });
+                        })
+                        ->where('allCustomers', 1)
+                        ->where('enabled', 1);
+                    });
+                })
+                ->orWhere('name', $campaignName)
+                ->get();
+        }
+
+        $campaign->save();
         return redirect()->route('campaigns.index')->with('success', 'Coda inserita');
     }
 

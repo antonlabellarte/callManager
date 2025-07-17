@@ -3,56 +3,61 @@
 
 <div class="container" style="margin-top: 10px;">
     <h3>Nuova campagna</h3>
+
+    <div class="alert alert-danger" id="validationAlert" role="alert" style="width: fit-content; margin: 0 auto; margin-bottom: 15px; display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/></svg>
+        <span id="validationAlertText"></span>
+    </div>
     <div class="row">
         <div class="col" action="">
-            <form action="{{ route('campaigns.store') }}" method="POST">
+            <form action="{{ route('campaigns.store') }}" method="POST" onsubmit="return validateForm()">
             @csrf
                 <div class="mb-3">
-                    <label>Nome campagna</label>
-                    <input type="text" class="form-control" id="nomeCampagna" name="nomeCampagna">
+                    <label id="campaignNameLabel">Nome campagna</label>
+                    <input type="text" class="form-control" id="nomeCampagna" name="nomeCampagna" oninput="checkEmptiness()">
                 </div>
                 <div class="mb-3">
                     <label>Messaggio</label>
                     <textarea class="form-control" id="testo" name="testo" rows="3"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label>Tutti i chiamanti</label>
+                    <label id="allCustomerLabel">Tutti i chiamanti</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="allCustomer" id="allCustomer1" value="1" onchange="hideGroups()">
+                        <input class="form-check-input" type="radio" name="allCustomer" id="allCustomer1" value="1" onchange="checkEmptiness()">
                         <label class="form-check-label" for="allCustomer1">
                             Sì
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="allCustomer" id="allCustomer2" value="0" onchange="hideGroups()">
+                        <input class="form-check-input" type="radio" name="allCustomer" id="allCustomer2" value="0" onchange="checkEmptiness()">
                         <label class="form-check-label" for="allCustomer2">
                             No
                         </label>
                     </div>
 
-                    <label>Abbattimento</label>
+                    <label id="abbattimentoLabel">Abbattimento</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="abbattimento" id="abbattimento1" value="1" onchange="hideGroups()">
+                        <input class="form-check-input" type="radio" name="abbattimento" id="abbattimento1" value="1" onchange="checkEmptiness()">
                         <label class="form-check-label" for="abbattimento1">
                             Sì
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="abbattimento" id="abbattimento2" value="0" onchange="hideGroups()">
+                        <input class="form-check-input" type="radio" name="abbattimento" id="abbattimento2" value="0" onchange="checkEmptiness()">
                         <label class="form-check-label" for="abbattimento2">
                             No
                         </label>
                     </div>
 
-                    <label>Attiva</label>
+                    <label id="enabledLabel">Attiva</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="enabled" id="enabled1" value="1" onchange="hideGroups()">
+                        <input class="form-check-input" type="radio" name="enabled" id="enabled1" value="1" onchange="checkEmptiness()">
                         <label class="form-check-label" for="enabled1">
                             Sì
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="enabled" id="enabled2" value="0" onchange="hideGroups()">
+                        <input class="form-check-input" type="radio" name="enabled" id="enabled2" value="0" onchange="checkEmptiness()">
                         <label class="form-check-label" for="enabled2">
                             No
                         </label>
@@ -63,6 +68,7 @@
                     <input type="date" class="form-control" id="dataInizio" name="dataInizio">
                     <label style="margin-top: 10px;">Ora iniziale</label>
                     <select name="startHour" style="border: 1px solid lightgray; background-color: white; border-radius: 10px;">
+                        <option value=""></option>
                         <option value="1">00</option>
                         <option value="1">01</option>
                         <option value="2">02</option>
@@ -90,6 +96,7 @@
                     </select>
                     : 
                     <select name="startMinute" style="border: 1px solid lightgray; background-color: white; border-radius: 10px;">
+                        <option value=""></option>
                         <option value="1">00</option>
                         <option value="1">01</option>
                         <option value="2">02</option>
@@ -157,6 +164,7 @@
                     <input type="date" class="form-control" id="endDate" name="endDate">
                     <label style="margin-top: 10px;">Ora finale</label>
                     <select name="endHour" style="border: 1px solid lightgray; background-color: white; border-radius: 10px;">
+                        <option value=""></option>
                         <option value="1">00</option>
                         <option value="1">01</option>
                         <option value="2">02</option>
@@ -184,6 +192,7 @@
                     </select>
                     : 
                     <select name="endMinute" style="border: 1px solid lightgray; background-color: white; border-radius: 10px;">
+                        <option value=""></option>
                         <option value="1">00</option>
                         <option value="1">01</option>
                         <option value="2">02</option>
@@ -249,16 +258,18 @@
                 <div class="mb-3" id="queueGroup">
                     <label style="margin-top: 10px; width: 200px;">Coda di destinazione</label>
                     <select name="queue" id="queue" style="border: 1px solid lightgray; background-color: white; border-radius: 10px;">
+                            <option value=""></option>
                         @foreach($queues as $queue)
-                            <option value="{{ $queue->queue }}">{{ $queue->name }}</option>
+                            <option value="{{ $queue->queue }}">{{ $queue->queue }} | {{ $queue->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="mb-3" id="forceQueueGroup">
                     <label style="margin-top: 10px; width: 200px;">Forza su coda</label>
                     <select name="forzaCoda" id="forzaCoda" style="border: 1px solid lightgray; background-color: white; border-radius: 10px;">
+                        <option value=""></option>
                         @foreach($queues as $queue)
-                            <option value="{{ $queue->queue }}">{{ $queue->name }}</option>
+                            <option value="{{ $queue->queue }}">{{ $queue->queue }} | {{ $queue->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -327,13 +338,83 @@
 </style>
 
 <script>
-    function hideGroups() {
-        const checkboxAllCustomer = document.getElementById('switchCheckDefault').value;
-        const checkboxAbbattimento = document.getElementById('switchCheckDefault').value;
-        const checkboxEnabled = document.getElementById('switchCheckDefault').value;
+    // Selezione preliminare delle label e radio button
+    let campaignNameLabel = document.getElementById('campaignNameLabel');
+    let allCustomerLabel = document.getElementById('allCustomerLabel');
+    let abbattimentoLabel = document.getElementById('abbattimentoLabel');
+    let enabledLabel = document.getElementById('enabledLabel');
+    
+    // Imposta le label rosse di default
+    campaignNameLabel.style.color = "red";
+    allCustomerLabel.style.color = "red";
+    abbattimentoLabel.style.color = "red";
+    enabledLabel.style.color = "red";
 
-        if( checkboxAllCustomer == 1 ) {
-            console.log("è 1")
+    // Se le radio non sono checkate diventano rosse
+    if ( !document.querySelector('input[name="allCustomer"]:checked') ) {
+            allCustomerLabel.style.color = "red";
+    }
+
+    if ( !document.querySelector('input[name="abbattimento"]:checked') ) {
+            abbattimentoLabel.style.color = "red";
+    }
+
+    if ( !document.querySelector('input[name="enabled"]:checked') ) {
+            enabledLabel.style.color = "red";
+    }   
+
+    // Funzione di controllo dei dati vuoti
+    function checkEmptiness() {
+        let campaignName = document.getElementById('nomeCampagna').value;
+
+        if (campaignName !== "") {
+            campaignNameLabel.style.color = "black";
+        } else {
+            campaignNameLabel.style.color = "red";
+        }
+
+        if ( document.querySelector('input[name="allCustomer"]:checked') ) {
+            allCustomerLabel.style.color = "black";
+        }
+
+        if ( document.querySelector('input[name="abbattimento"]:checked') ) {
+            abbattimentoLabel.style.color = "black";
+        }
+
+        if ( document.querySelector('input[name="enabled"]:checked') ) {
+            enabledLabel.style.color = "black";
+        }
+    }
+
+    // Funzione di validazione forme
+    function validateForm() {
+        let validationAlert = document.getElementById('validationAlert');
+        
+
+        let campaignName = document.getElementById('nomeCampagna').value;
+
+        if ( campaignName == "" ) {
+            document.getElementById('validationAlertText').innerHTML = "Nome campagna obbligatorio"
+            validationAlert.style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return false
+        } else if ( !document.querySelector('input[name="allCustomer"]:checked') ) {
+            document.getElementById('validationAlertText').innerHTML = "Specificare se la campagna è per tutti  i chiamanti"
+            validationAlert.style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return false
+        } else if ( !document.querySelector('input[name="abbattimento"]:checked') )  {
+            document.getElementById('validationAlertText').innerHTML = "Specificare se l'abbattimento dev'essere attivato"
+            validationAlert.style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return false
+        } else if ( !document.querySelector('input[name="enabled"]:checked') ) {
+            document.getElementById('validationAlertText').innerHTML = "Specificare se dev'essere attivata"
+            validationAlert.style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return false;
+        } else {
+            return true;
         }
     }
 </script>
