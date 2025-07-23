@@ -25,6 +25,10 @@ Route::get('/rules/list', RulesControllers::class .'@index')->name('rules.index'
 Route::get('/rules/create', RulesControllers::class .'@create')->name('rules.create')->middleware('auth');
 // Nuova regola (insert)
 Route::get('/rules/storing', RulesControllers::class .'@store')->name('rules.store')->middleware('auth');
+// Modifica regola (form)
+Route::get('/rules/{id}/edit', RulesControllers::class .'@edit')->name('rules.edit')->middleware('auth');
+// Modifica regola (update)
+Route::get('/rules/{id}/updating', RulesControllers::class .'@update')->name('rules.update')->middleware('auth');
 // Elimina regola (delete)
 Route::delete('/rules/{id}', RulesControllers::class . '@destroy')->name('rules.destroy')->middleware('auth');
 

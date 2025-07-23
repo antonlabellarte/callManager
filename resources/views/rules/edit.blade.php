@@ -2,18 +2,18 @@
 @include('navbar')
 <div class="container">
     <div class="alert alert-light" role="alert" style="margin-top: 20px; border-color: black; color: black;">
-        Nuova regola
+        Modifica regola ID # {{ $rule->id }}
     </div>
     <div class="row">
         @if (session('success'))
             <div class="alert alert-success" role="alert">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0a3622" class="bi bi-check-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/></svg>
                 <strong>Operazione completata</strong><br>
-                Regola inserita correttamente
+                Regola aggiornata
             </div>
         @endif
 
-        @if (session('overlapFoundNoDates') || session('overlapFoundWithDates'))
+        @if (session('found'))
             <div class="alert alert-warning" role="alert">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#664D03" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/></svg>
                 <strong>Attenzione!</strong><br>
@@ -29,36 +29,37 @@
                     <select class="form-control" name="service" id="service">
                         <option value="">-- Seleziona un servizio --</option>
                         @foreach ($servicesPrincipali as $service)
-                            <option value="{{ $service->servizio }}">{{ $service->name }}</option>
+                            <option value="{{ $service->servizio }}" {{ $service->servizio == $rule->servizio ? 'selected' : '' }}>
+                                {{ $service->servizio }}
+                            </option>
                         @endforeach
                     </select><br>
                 </div>
 
                 <div class="form-group">
                     <label>Flag</label>
-                    <select class="form-control" name="flag" id="flag" onchange="disableDates()">
-                        <option value="">-- Seleziona un flag --</option>
-                        <option value="ALL">ALL</option>
-                        <option value="SABATO">SABATO</option>
-                        <option value="DOMENICA">DOMENICA</option>
-                        <option value="GIORNO">GIORNO</option>
+                    <select class="form-control" name="flag" id="flag" onchange="showDates()">
+                        <option value="ALL" {{ $rule->flag == 'ALL' ? 'selected' : '' }}>ALL</option>
+                        <option value="SABATO" {{ $rule->flag == 'SABATO' ? 'selected' : '' }}>SABATO</option>
+                        <option value="DOMENICA" {{ $rule->flag == 'DOMENICA' ? 'selected' : '' }}>DOMENICA</option>
+                        <option value="GIORNO" {{ $rule->flag == 'GIORNO' ? 'selected' : '' }}>GIORNO</option>
                     </select><br>
                 </div>
 
                 <div class="form-group" id="startDateGroup">
                     <label>Data iniziale</label>
-                    <input class="form-control" type="date" id="startDate" name="startDate" disabled>                    
+                    <input class="form-control" type="date" id="startDate" name="startDate">
                 </div><br>
 
                 <div class="form-group" id="endDateGroup">
                     <label>Data finale</label>
-                    <input class="form-control" type="date" id="endDate" name="endDate" disabled>
+                    <input class="form-control" type="date" id="endDate" name="endDate">
                 </div><br>
 
                 <div class="form-group">
                     <span style="width: 100px;">Ora iniziale:</span>
                     <select name="startHour" id="startHour">
-                        <option value="0">00</option>
+                        <option value="1">00</option>
                         <option value="1">01</option>
                         <option value="2">02</option>
                         <option value="3">03</option>
@@ -85,7 +86,7 @@
                     </select> 
                     :
                     <select name="startMinute" id="startMinute">
-                        <option value="0">00</option>
+                        <option value="1">00</option>
                         <option value="1">01</option>
                         <option value="2">02</option>
                         <option value="3">03</option>
@@ -149,7 +150,7 @@
 
                     <span style="width: 100px;">Ora finale:</span>
                     <select name="endHour" id="endHour" style="margin-right: 5px;">
-                        <option value="0">00</option>
+                        <option value="1">00</option>
                         <option value="1">01</option>
                         <option value="2">02</option>
                         <option value="3">03</option>
@@ -176,7 +177,7 @@
                     </select> 
                     :
                     <select name="endMinute" id="endMinute" style="margin-left: 5px;">
-                        <option value="0">00</option>
+                        <option value="1">00</option>
                         <option value="1">01</option>
                         <option value="2">02</option>
                         <option value="3">03</option>
@@ -244,8 +245,8 @@
                     <select class="form-control" name="firstQueuePair" id="firstQueuePair" onchange="equalPartitions()">
                         <option value="">-- Seleziona un sotto-servizio --</option>
                         @foreach ($servicesPartizionati as $partService)
-                            <option value="{{ $partService->name }}" data-prefix="{{ Str::substr($partService->name, 0, strlen($servicesPrincipali[0]->servizio)) }}">
-                                {{ $partService->name }}
+                            <option value="{{ $partService->servizio }}" data-prefix="{{ Str::substr($partService->servizio, 0, strlen($servicesPrincipali[0]->servizio)) }}">
+                                {{ $partService->servizio }}
                             </option>
                         @endforeach
                     </select>
@@ -259,8 +260,8 @@
                     <select class="form-control" name="secondQueuePair" id="secondQueuePair" onchange="equalPartitions()">
                         <option value="">-- Seleziona un sotto-servizio --</option>
                         @foreach ($servicesPartizionati as $partService)
-                            <option value="{{ $partService->name }}" data-prefix="{{ Str::substr($partService->name, 0, strlen($servicesPrincipali[0]->servizio)) }}">
-                                {{ $partService->name }}
+                            <option value="{{ $partService->servizio }}" data-prefix="{{ Str::substr($partService->servizio, 0, strlen($servicesPrincipali[0]->servizio)) }}">
+                                {{ $partService->servizio }}
                             </option>
                         @endforeach
                     </select>
@@ -274,8 +275,8 @@
                     <select class="form-control" name="thirdQueuePair" id="thirdQueuePair" onchange="equalPartitions()">
                         <option value="">-- Seleziona un sotto-servizio --</option>
                         @foreach ($servicesPartizionati as $partService)
-                            <option value="{{ $partService->name }}" data-prefix="{{ Str::substr($partService->name, 0, strlen($servicesPrincipali[0]->servizio)) }}">
-                                {{ $partService->name }}
+                            <option value="{{ $partService->servizio }}" data-prefix="{{ Str::substr($partService->servizio, 0, strlen($servicesPrincipali[0]->servizio)) }}">
+                                {{ $partService->servizio }}
                             </option>
                         @endforeach
                     </select><br>
@@ -297,7 +298,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/></svg>
                         </span>
                         <span style="float: center;">
-                            Reset
+                            Reimposta campi
                         <span>
                     </button>
                 </div>
@@ -312,19 +313,27 @@
     }
 
     .col{
-        text-align: left;
+        border: 1px solid lightgray;
+        background-color: white;
+        padding: 10px;
         display: flex;
         justify-content: center;
     }
 
     form {
         text-align: left;
-        width: 60%;
-        background-color: whitesmoke;
+        display: flex;
+        flex-direction: column;
+        width: 30%;        
+        background-color: #e2e3e5;
         border: 1px solid lightgray;
         border-radius: 10px;
         padding: 20px;
-    } 
+    }
+
+    #startDateGroup, #endDateGroup {
+        display: none;
+    }
 
     #startMinute, #startHour, #endMinute, #endHour {
         margin-top: 5px;
@@ -339,23 +348,18 @@
 </style>
 
 <script>
-// Se flag diverso da giorno disabilita le date
-function disableDates(){
-    let flag = document.getElementById('flag').value
+// Funzione che attiva le date se il FLAG selezionato è GIORNO
+function showDates(){
 
-    if (flag !== "GIORNO") {
-        document.getElementById('startDate').value = "";
-        document.getElementById('endDate').value = "";
-        document.getElementById('startDate').disabled = true;
-        document.getElementById('endDate').disabled = true;
+    if( document.getElementById("flag").value === "GIORNO" ){
+        document.getElementById("startDateGroup").style.display = "block";
+        document.getElementById("endDateGroup").style.display = "block";
+
     } else {
-        document.getElementById('startDate').disabled = false;
-        document.getElementById('endDate').disabled = false;
+        document.getElementById("startDateGroup").style.display = "none";
+        document.getElementById("endDateGroup").style.display = "none";
     }
-
 }
-
-
 
 // Disabilitazione input
 

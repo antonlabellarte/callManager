@@ -30,113 +30,101 @@ class RulesControllers extends Controller
     }
     
     public function store(Request $request){
+        $rule = new Rules();
 
-        $servizio = $request->input('service');
-        $flag = $request->input('flag');
+        $rule->servizioPartizionato = $request->input('service'); $servizioPartizionato = $request->input('service');
+        $rule->dataInizio = $request->input('startDate'); $dataInizio = $request->input('startDate');
+        $rule->dataFine = $request->input('endDate'); $dataFine = $request->input('endDate');
+        $rule->dataFlag = $request->input('flag'); $dataFlag = $request->input('flag');
+        $rule->oraInizio = $request->input('startHour') . ":" . $request->input('startMinute') . ":00"; $oraInizio = $request->input('startHour') . ":" . $request->input('startMinute') . ":00";
+        $rule->oraFine = $request->input('endHour') . ":" . $request->input('endMinute') . ":00"; $oraFine = $request->input('endHour') . ":" . $request->input('endMinute') . ":00";
+        $rule->servizioUno = $request->input('firstQueuePair'); $servizioUno = $request->input('firstQueuePair');
+        $rule->percentualeUno = $request->input('firstPartition'); $percentualeUno = $request->input('firstPartition');
+        $rule->servizioDue = $request->input('secondQueuePair');  $servizioDue = $request->input('secondQueuePair');
+        $rule->percentualeDue = $request->input('secondPartition'); $percentualeDue = $request->input('secondPartition');
+        $rule->servizioTre = $request->input('thirdQueuePair'); $servizioTre = $request->input('thirdQueuePair');
+        $rule->percentualeTre = $request->input('thirdPartition'); $percentualeTre = $request->input('thirdPartition');
 
-        $data_iniziale = $request->input('startDate');
-        $data_finale = $request->input('endDate');
-
-        // Composizione ora iniziale
-        $oreOraIniziale = $request->input('startHour');
-        $minutiOraIniziale = $request->input('startMinute');
-        
-        $ora_iniziale = $oreOraIniziale . ":" . $minutiOraIniziale . ':00';
-
-        // Composizione ora finale
-        $oreOraFinale = $request->input('endHour');
-        $minutiOraFinale = $request->input('endMinute');
-
-        $ora_finale = $oreOraFinale . ":" . $minutiOraFinale . ':00';
-        
-        $coda_uno = $request->input('firstQueuePair');
-        $partizione_uno = $request->input('secondPartition');
-        $coda_due = $request->input('secondQueuePair');
-        $partizione_due = $request->input('secondPartition');
-        $coda_tre = $request->input('thirdQueuePair');
-        $partizione_tre = $request->input('thirdPartition');
-
-        // Se il flag corrisponde ad ALL, SABATO o DOMENICA non avviene il controllo con le date
-        if ( $flag === "ALL" || $flag === "SABATO" || $flag === "DOMENICA") {
-
-            // Query che verifica la presenza di accavvalamenti
-            $previousRule = Rules::where('servizio', $servizio)
-            ->where('flag', 'like', $flag . '%')
-            ->where(function ($query) use ($ora_iniziale, $ora_finale) {
-                $query->where('ora_finale', '>=', $ora_iniziale)->where('ora_finale', '<=', $ora_finale);
-            })->get();
-
+        // Inserimento e controllo senza date
+        if( $request->input('flag') == "ALL" || $request->input('flag') == "SABATO" || $request->input('flag') == "DOMENICA" ) {
             
-            // Se ha trovato una riga con accavallemento di date, restituisce errore
-            if($previousRule->isNotEmpty()) {
-                return redirect()->back()->with('found', 'Hours interval found');
-            } else {
-                //Se non ha trovato righe con accavallamento di date, inserisce la regola
-                $rule = new Rules();
-                
-                $rule->servizio = $servizio;
-                // $rule->data_iniziale = $request->input('startDate');
-                // $rule->data_finale = $request->input('endDate');
-                $rule->flag = $flag;
-                $rule->ora_iniziale = $ora_iniziale;
-                $rule->ora_finale = $ora_finale;
-                $rule->coda_uno = $coda_uno;
-                $rule->partizione_uno = $partizione_uno;
-                $rule->coda_due = $coda_due;
-                $rule->partizione_due = $partizione_due;
-                $rule->coda_tre = $coda_tre;
-                $rule->partizione_tre = $partizione_tre;
-                $rule->save();
-                return redirect()->back()->with('succes', 'Rule created');
-            }
-        } elseif ( $flag === "GIORNO" ) {           
-
-            $dataOraInizio = $data_iniziale . $ora_iniziale;
-            $dataOraFine = $data_finale . $ora_finale;
-
-            $previousRule = Rules::where('servizio', $servizio)
-            ->where('flag', 'like', $flag . '%')
-            ->where(function ($query) use ($dataOraInizio, $dataOraFine) {
-                $query->where(function ($q) use ($dataOraInizio) {
-                    $q->whereRaw('? >= (CAST(data_iniziale AS DATETIME) + CAST(ora_iniziale AS DATETIME))', [$dataOraInizio])
-                    ->whereRaw('? < (CAST(data_finale AS DATETIME) + CAST(ora_finale AS DATETIME))', [$dataOraInizio]);
-                })->orWhere(function ($q) use ($dataOraFine) {
-                    $q->whereRaw('? > (CAST(data_iniziale AS DATETIME) + CAST(ora_iniziale AS DATETIME))', [$dataOraFine])
-                    ->whereRaw('? <= (CAST(data_finale AS DATETIME) + CAST(ora_finale AS DATETIME))', [$dataOraFine]);
-                });
-            })
+            // Controlla la sovrapposizione solo tra gli orari
+            $justTimeOverlap = Rules::where('servizioPartizionato', $servizioPartizionato)
+                ->where('dataFlag', $dataFlag)
+                ->where('oraFine', '>', $oraInizio)
+                ->where('oraInizio', '<', $oraFine)
             ->get();
 
-
-            // Se ha trovato una riga con accavallemento di date, restituisce errore
-            if($previousRule->isNotEmpty()) {
-                return redirect()->back()->with('found', 'Hours interval found');
+            $sameRuleNoDates = Rules::where('servizioPartizionato', $servizioPartizionato)
+                ->where('dataFlag', $dataFlag)
+                ->where('oraInizio', $oraInizio)
+                ->where('oraFine', $oraFine)
+                ->where('servizioUno', $servizioUno)
+                ->where('percentualeUno', $percentualeUno)
+                ->where(function($query) use ($servizioDue) {
+                    $query->whereNull('servizioDue')
+                        ->orWhere('servizioDue', $servizioDue);
+                })
+                ->where(function($query) use ($percentualeDue) {
+                    $query->whereNull('percentualeDue')
+                        ->orWhere('percentualeDue', $percentualeDue);
+                })
+                ->where(function($query) use ($servizioTre) {
+                    $query->whereNull('servizioTre')
+                        ->orWhere('servizioTre', $servizioTre);
+                })
+                ->where(function($query) use ($percentualeTre) {
+                    $query->whereNull('percentualeTre')
+                        ->orWhere('percentualeTre', $percentualeTre);
+                })
+            ->get();
+            
+            if ($sameRuleNoDates->isNotEmpty()) {
+                // Trovata regola uguale
+                return redirect()->back()->with('sameRuleFoundNoDates', 'Trovata regola uguale');
+            } elseif ($justTimeOverlap->isNotEmpty()) {
+                // Trovato accavallamento
+                return redirect()->back()->with('overlapFoundNoDates', 'Trovato accavallamento');
             } else {
-                // Se non ha trovato righe con accavallamento di date e orari, inserisce la regola
-                $rule = new Rules();
-
-                $rule->servizio = $servizio;
-                $rule->data_iniziale = $request->input('startDate');
-                $rule->data_finale = $request->input('endDate');
-                $rule->flag = $flag;
-                $rule->ora_iniziale = $ora_iniziale;
-                $rule->ora_finale = $ora_finale;
-                $rule->coda_uno = $coda_uno;
-                $rule->partizione_uno = $partizione_uno;
-                $rule->coda_due = $coda_due;
-                $rule->partizione_due = $partizione_due;
-                $rule->coda_tre = $coda_tre;
-                $rule->partizione_tre = $partizione_tre;
+                // Salva
                 $rule->save();
-                return redirect()->back()->with('succes', 'Rule created');
+                return redirect()->back();
             }
-            // return redirect()->back()->with('notImplementedYet', 'Feature not implemented yet');
-        }
+
+
+
+        } elseif ($request->input('flag') == 'GIORNO') {
+
+            $overlapWithDates = Rules::where('servizioPartizionato', $servizioPartizionato)
+            ->where('dataFlag', 'GIORNO')
+            ->whereRaw('? < STR_TO_DATE(CONCAT(dataFine, " ", oraFine), "%Y-%m-%d %H:%i:%s")', [$dataInizio . " " . $oraInizio])
+            ->whereRaw('? > STR_TO_DATE(CONCAT(dataInizio, " ", oraInizio), "%Y-%m-%d %H:%i:%s")', [$dataFine . " " . $oraFine])
+            ->get();
+
+            //$sameRuleWithDates = 
+
+            if($overlapWithDates->IsNotEmpty()){
+                // Trovato accavallamento
+                return redirect()->back()->with('overlapFoundWithDates', 'Trovato accavallamento');
+            } else {
+                $rule->save();
+                return redirect()->back();
+            }
+
+        }        
     }
 
     
     public function edit(string $id){
-        //
+        $rule = Rules::find($id);
+
+        // Servizio dove tipologia = principale
+        $servicesPrincipali = Services::where('typology', 'principale')->get();
+
+        // Servizio dove typology = partizione
+        $servicesPartizionati = Services::where('typology', 'secondaria')->get();
+
+        return view('rules.edit', compact('rule', 'servicesPrincipali', 'servicesPartizionati' ));
     }
 
     

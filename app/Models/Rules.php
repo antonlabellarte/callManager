@@ -16,7 +16,7 @@ class Rules extends Model
         "servizioPartizionato",
         "dataInizio",
         "dataFine",
-        "flag",
+        "dataFlag",
         "oraInizio",
         "oraFine",
         "servizioUno",
