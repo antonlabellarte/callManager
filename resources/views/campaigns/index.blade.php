@@ -12,7 +12,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" style="font-weight: bold;">
-                    Sei sicuro di voler eliminare la campagna {{ $campaign->nomeCampagna }}?
+                    Sei sicuro di voler eliminare la campagna {{ $campaign->name }}?
                     </div>
                     <div class="modal-footer">
                         <form action="{{ route('campaigns.destroy', $campaign->id )}}" method="POST">
@@ -36,9 +36,6 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16"><path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/><path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/></svg>
                     Campagne
                 </h3><br>
-                <h5>
-                    Regole totali: {{ $campaigns->count() }}
-                </h5><br>
                 {{-- <form action="{{ route('import.excel') }}" method="POST" enctype="multipart/form-data" style="display: none;" id="excelForm">
                     @csrf
                     <input type="file" name="file_excel" required>
@@ -53,13 +50,12 @@
                     Importa da un file Excel
                 </button> --}}
             </div>
-            @if (count($campaigns) > 0)
-
+            @if (count($campaigns) > 0)                
                 @foreach ($campaigns as $campaign)
                     <div class="card" style="margin-top: 10px; margin-bottom: 10px;">
                         <div class="card-header" style="background-color: #5F57A1; color: white;">
                             <span style="float: left;">
-                                <strong>ID: {{ $campaign->id}}# | {{ $campaign->nomeCampagna }}</strong>
+                                <strong>ID: {{ $campaign->id}}# | {{ $campaign->name }}</strong>
                             </span>
                             <span style="float: right;">
                                 <a>
@@ -88,29 +84,23 @@
                                 Messaggio
                             </h4>
                             <p class="card-text" style="padding: 10px; border: 1px solid lightgray; border-radius: 10px; background-color: whitesmoke;">
-                                {{ $campaign->testo }}
+                                {{ $campaign->message }}
                             </p>
                             
                             <div style="display: flex; flex-direction: row;">
-                                @if ($campaign->abbattimento == 1)
-                                    <span style="border: 1px solid lightgray; border-radius: 10px; padding: 10px; margin-right: 5px; width: fit-content; font-size: 12px;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="{{ $campaign->abbattimento == 1 ? '#5cb85c' : '#d9534f' }}" class="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>
-                                @endif
-                                    Abbattimento
-                                    </span>
-                                @if ($campaign->abbattimento == 1)
-                                    <span style="border: 1px solid lightgray; border-radius: 10px; padding: 10px; margin-right: 5px; width: fit-content; font-size: 12px;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="{{ $campaign->allCustomer == 1 ? '#5cb85c' : '#d9534f' }}" class="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>
-                                @endif
-                                    Tutti i chiamanti
-                                    </span>
-                                @if ($campaign->abbattimento == 1)
-                                    <span style="border: 1px solid lightgray; border-radius: 10px; padding: 10px; margin-right: 5px; width: fit-content; font-size: 12px;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="{{ $campaign->enabled == 1 ? '#5cb85c' : '#d9534f' }}" class="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>                                        
-                                @endif
-                                    Attiva
-                                    </span>
-                                </div>
+                                <span style="border: 1px solid lightgray; border-radius: 10px; padding: 10px; margin-right: 5px; width: fit-content; font-size: 12px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="{{ $campaign->dropCall == 1 ? '#5cb85c' : '#d9534f' }}" class="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>
+                                Abbattimento
+                                </span>
+                                <span style="border: 1px solid lightgray; border-radius: 10px; padding: 10px; margin-right: 5px; width: fit-content; font-size: 12px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="{{ $campaign->allCustomers == 1 ? '#5cb85c' : '#d9534f' }}" class="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>
+                                Tutti i chiamanti
+                                </span>
+                                <span style="border: 1px solid lightgray; border-radius: 10px; padding: 10px; margin-right: 5px; width: fit-content; font-size: 12px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="{{ $campaign->enabled == 1 ? '#5cb85c' : '#d9534f' }}" class="bi bi-circle-fill" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/></svg>
+                                Attiva
+                                </span>
+                            </div>
                         </div>
                     </div>
                 @endforeach

@@ -33,12 +33,11 @@ class CampaignsController extends Controller
         $campaign->toQueue = $request->input('toQueue');
         $campaign->dropCall = $request->boolean('abbattimento');
         $campaign->name = $request->input('nomeCampagna');
-        $campaign->dateStart = $request->input('dataInizio');
-        $campaign->dateEnd = $request->input('dataFine');
+        $campaign->dateStart = $request->input('dataInizio') . " " . $request->input('startHour') . ":" . $request->input('startMinute') . ":00";
+        $campaign->dateEnd = $request->input('dataFine') . " " . $request->input('endHour') . ":" . $request->input('endMinute') . ":00";
         $campaign->allCustomers = $request->boolean('allCustomer');
-        $campaign->enabled = $request->boolean('enabled');        
+        $campaign->enabled = $request->boolean('enabled');
 
-        
         $existentCampaign = Campaigns::where('message', $request->input('messaggio'))
             ->where('queue', $request->input('coda'))
             ->where('dropCall', $request->boolean('abbattimento'))
@@ -54,8 +53,8 @@ class CampaignsController extends Controller
             return redirect()->back()->with('warning', 'Campagna uguale trovata');    
         } else {
             $queue = $request->input('coda');
-            $dateStart = $request->input('dataInizio');
-            $dateEnd = $request->input('dataFine');
+            $dateStart = $request->input('dataInizio') . " " . $request->input('startHour') . ":" . $request->input('startMinute') . ":00";
+            $dateEnd = $request->input('dataFine') . " " . $request->input('endHour') . ":" . $request->input('endMinute') . ":00";
             $name = $request->input('nomeCampagna');
 
             $overlap = Campaigns::where(function ($q) use ($queue, $dateStart, $dateEnd) {
