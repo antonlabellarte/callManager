@@ -81,10 +81,10 @@ class RulesControllers extends Controller
             
             if ($sameRuleNoDates->isNotEmpty()) {
                 // Trovata regola uguale
-                return redirect()->back()->with('sameRuleFoundNoDates', 'Trovata regola uguale');
+                return redirect()->back()->with('sameRuleNoDates', $sameRuleNoDates)->with('sameRuleFoundNoDates', 'Trovata regola uguale');
             } elseif ($justTimeOverlap->isNotEmpty()) {
                 // Trovato accavallamento
-                return redirect()->back()->with('overlapFoundNoDates', 'Trovato accavallamento');
+                return redirect()->back()->with('justTimeOverlap', $justTimeOverlap)->with('overlapFoundNoDates', 'Trovato accavallamento');
             } else {
                 // Salva
                 $rule->save();
