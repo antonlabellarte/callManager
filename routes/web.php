@@ -56,7 +56,7 @@ Route::post('/campaignrules/storing', CampaignsController::class .'@store')->nam
 // Dettagli campagna regola
 Route::get('campaignrules/details', CampaignsController::class .'@details')->name('campaigns.details')->middleware('auth');
 // Modifica campagna regola (edit)
-Route::get('campaignrules/edit', CampaignsController::class .'@edit')->name('campaigns.edit')->middleware('auth');
+Route::get('campaignrules/{id}/edit', CampaignsController::class .'@edit')->name('campaigns.edit')->middleware('auth');
 // Aggiorna campagna regola (update)
 Route::put('/campaignrules/{id}', CampaignsController::class . '@update')->name('campaigns.update')->middleware('auth');
 // Elimina regola (delete)

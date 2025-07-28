@@ -98,16 +98,72 @@ class CampaignsController extends Controller
 
     
     public function edit(string $id){
-        $rule = Campaigns::find($id);
+        $campaigns = Campaigns::find($id);
 
         $queues = Services::all();
+        
 
-        return view('campaigns.edit', compact('rule', 'queues'));
+        return view('campaigns.edit', compact('campaigns', 'queues'));
     }
 
     
     public function update(Request $request, string $id){
-        //
+        $campaign = Campaigns::find($id);
+
+        $campaign->message = $request->input('testo'); $messaggio = $request->input('testo');
+        $campaign->queue = $request->input('coda'); $cxoda = $request->input('coda');
+        $campaign->toQueue = $request->input('toQueue'); $forzaCoda = $request->input('toQueue');
+        $campaign->dropCall = $request->boolean('abbattimento'); $dropCall = $request->boolean('abbattimento');
+        $campaign->name = $request->input('nomeCampagna'); $nomeCampagna = $request->input('nomeCampagna');
+        $campaign->dateStart = $request->input('dataInizio') . " " . $request->input('startHour') . ":" . $request->input('startMinute') . ":00"; $dataInizio = $request->input('dataInizio') . " " . $request->input('startHour') . ":" . $request->input('startMinute') . ":00";
+        $campaign->dateEnd = $request->input('dataFine') . " " . $request->input('endHour') . ":" . $request->input('endMinute') . ":00"; $dataFine = $request->input('dataFine') . " " . $request->input('endHour') . ":" . $request->input('endMinute') . ":00";
+        $campaign->allCustomers = $request->boolean('allCustomer'); $allCustomers = $request->boolean('allCustomer');
+        $campaign->enabled = $request->boolean('enabled'); $enabled = $request->boolean('enabled');
+
+        $overlap = Campaigns::where(function ($query) use ($coda, $dataInizio, $dataFine) {
+                $query->where(function ($q) use ($coda, $dataInizio, $dataFine) {
+                    $q->where(function ($q2) use ($coda) {
+                        $q2->where('queue', $coda)
+                        ->orWhere('queue', '0')
+                        ->orWhereRaw('? <> ""', [$coda]); // check if $queue is non-empty
+                    });
+
+                    $dataInizio = $dataInizio ?: '2100-01-01 00:00:00';
+                    $dataFine   = $dataFine ?: '2000-01-01 00:00:00';
+
+                    $q->where(function ($q3) use ($dataInizio, $dataFine) {
+                        $q3->where('dateStart', '<=', $dataInizio)
+                        ->where('dateEnd', '>=', $dataFine);
+                    })->orWhere(function ($q4) {
+                        $q4->whereNull('dateStart')
+                        ->whereNull('dateEnd');
+                    });
+
+                    $q->where('allCustomers', 1)
+                    ->where('enabled', 1);
+                });
+            })
+            ->orWhere(function ($query) use ($nomeCampagna, $id) {
+                $query->where('name', $nomeCampagna)
+                    ->where('campaignID', '<>', $id);
+            })
+            ->whereRaw('? = 1', [$enabled])
+            ->get();
+
+        if ( $overlap->isNotEmpty() ) {
+            return redirect()->back()->with('overlap', $overlap)->with('overlapFound', 'Accavallamento trovato');
+        } else {
+            
+            // Se allCustomers viene impostato su 1 elimina tutte le liste
+            if ( $allCustomers == 1 ) {
+                $listToDeleteIfAllCustomers = CustomersList::where('campaignID', $id);
+                $listToDeleteIfAllCustomers->delete();
+            }
+
+            $campaign->save();
+            return redirect()->route('campaigns.index')->with('successUpdate', 'Coda aggiornata');
+
+        }
     }
 
     
