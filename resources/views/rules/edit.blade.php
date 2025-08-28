@@ -15,6 +15,9 @@
 
         @if (session('found'))
             <div class="alert alert-warning" role="alert">
+                <span style="float: right;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/></svg>
+                </span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#664D03" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/></svg>
                 <strong>Attenzione!</strong><br>
                 Regola <strong>non</strong> inserita: è stato trovato un accavallamento di orari
@@ -22,15 +25,15 @@
         @endif
         
         <div class="col" style="margin-top: 20px;">
-            <form action="{{ route('rules.store') }}" style="display: flex; flex-direction: column;">
+            <form action="{{ route('rules.update', $rule->id) }}" style="display: flex; flex-direction: column;">
                 <!-- Servizio -->
                 <div class="form-group">
                     <label>Servizio</label>
                     <select class="form-control" name="service" id="service">
                         <option value="">-- Seleziona un servizio --</option>
                         @foreach ($servicesPrincipali as $service)
-                            <option value="{{ $service->servizio }}" {{ $service->servizio == $rule->servizio ? 'selected' : '' }}>
-                                {{ $service->servizio }}
+                            <option value="{{ $service->name }}" {{ $service->name == $rule->servizioPartizionato ? 'selected' : '' }}>
+                                {{ $service->name }}
                             </option>
                         @endforeach
                     </select><br>
@@ -48,18 +51,18 @@
 
                 <div class="form-group" id="startDateGroup">
                     <label>Data iniziale</label>
-                    <input class="form-control" type="date" id="startDate" name="startDate">
+                    <input class="form-control" type="date" id="startDate" name="startDate" value="{{ $rule->dataInizio }}">
                 </div><br>
 
                 <div class="form-group" id="endDateGroup">
                     <label>Data finale</label>
-                    <input class="form-control" type="date" id="endDate" name="endDate">
+                    <input class="form-control" type="date" id="endDate" name="endDate" value="{{ $rule->dataInizio }}">
                 </div><br>
 
                 <div class="form-group">
-                    <span style="width: 100px;">Ora iniziale:</span>
+                    <label style="width: 100px; text-align: left;">Ora iniziale:</label>
                     <select name="startHour" id="startHour">
-                        <option value="1">00</option>
+                        <option value="0">00</option>
                         <option value="1">01</option>
                         <option value="2">02</option>
                         <option value="3">03</option>
@@ -86,7 +89,7 @@
                     </select> 
                     :
                     <select name="startMinute" id="startMinute">
-                        <option value="1">00</option>
+                        <option value="0">00</option>
                         <option value="1">01</option>
                         <option value="2">02</option>
                         <option value="3">03</option>
@@ -148,9 +151,9 @@
                         <option value="59">59</option>
                     </select><br>
 
-                    <span style="width: 100px;">Ora finale:</span>
-                    <select name="endHour" id="endHour" style="margin-right: 5px;">
-                        <option value="1">00</option>
+                    <label style="width: 100px; text-align: left;">Ora finale:</label>
+                    <select name="endHour" id="endHour">
+                        <option value="0">00</option>
                         <option value="1">01</option>
                         <option value="2">02</option>
                         <option value="3">03</option>
@@ -176,8 +179,8 @@
                         <option value="23">23</option>
                     </select> 
                     :
-                    <select name="endMinute" id="endMinute" style="margin-left: 5px;">
-                        <option value="1">00</option>
+                    <select name="endMinute" id="endMinute">
+                        <option value="0">00</option>
                         <option value="1">01</option>
                         <option value="2">02</option>
                         <option value="3">03</option>
@@ -244,45 +247,45 @@
                     Coppia prima coda
                     <select class="form-control" name="firstQueuePair" id="firstQueuePair" onchange="equalPartitions()">
                         <option value="">-- Seleziona un sotto-servizio --</option>
-                        @foreach ($servicesPartizionati as $partService)
-                            <option value="{{ $partService->servizio }}" data-prefix="{{ Str::substr($partService->servizio, 0, strlen($servicesPrincipali[0]->servizio)) }}">
-                                {{ $partService->servizio }}
+                        @foreach ($servicesPartizionati as $servizioPartizionato)
+                            <option value="{{ $servizioPartizionato->name }}" {{ $servizioPartizionato->name == $rule->servizioUno ? 'selected' : '' }}>
+                                {{ $servizioPartizionato->name }}
                             </option>
                         @endforeach
                     </select>
 
                     Partizione prima coda
-                    <input type="number" class="form-control" id="firstPartition" max="100" oninput="equalPartitions()"><br>
+                    <input type="number" class="form-control" name="firstPartition" id="firstPartition" max="100" value="{{ $rule->percentualeUno }}" oninput="equalPartitions()"><br>
                 </div><br>
 
                 <div class="form-group">
                     Coppia seconda coda
                     <select class="form-control" name="secondQueuePair" id="secondQueuePair" onchange="equalPartitions()">
                         <option value="">-- Seleziona un sotto-servizio --</option>
-                        @foreach ($servicesPartizionati as $partService)
-                            <option value="{{ $partService->servizio }}" data-prefix="{{ Str::substr($partService->servizio, 0, strlen($servicesPrincipali[0]->servizio)) }}">
-                                {{ $partService->servizio }}
+                        @foreach ($servicesPartizionati as $servizioPartizionato)
+                            <option value="{{ $servizioPartizionato->name }}" {{ $servizioPartizionato->name == $rule->servizioDue ? 'selected' : '' }}>
+                                {{ $servizioPartizionato->name }}
                             </option>
                         @endforeach
                     </select>
 
                     Partizione seconda coda
-                    <input type="number" class="form-control" id="secondPartition" max="100" oninput="equalPartitions()"><br>
+                    <input type="number" class="form-control" name="secondPartition" id="secondPartition" max="100" value="{{ $rule->percentualeDue }}" oninput="equalPartitions()"><br>
                 </div>
 
                 <div class="form-group">
                     Coppia terza coda
                     <select class="form-control" name="thirdQueuePair" id="thirdQueuePair" onchange="equalPartitions()">
                         <option value="">-- Seleziona un sotto-servizio --</option>
-                        @foreach ($servicesPartizionati as $partService)
-                            <option value="{{ $partService->servizio }}" data-prefix="{{ Str::substr($partService->servizio, 0, strlen($servicesPrincipali[0]->servizio)) }}">
-                                {{ $partService->servizio }}
+                        @foreach ($servicesPartizionati as $servizioPartizionato)
+                            <option value="{{ $servizioPartizionato->name }}" {{ $servizioPartizionato->name == $rule->servizioDue ? 'selected' : '' }}>
+                                {{ $servizioPartizionato->name }}
                             </option>
                         @endforeach
                     </select><br>
 
                     Partizione terza coda
-                    <input type="number" class="form-control" id="thirdPartition" max="100" oninput="equalPartitions()"><br>
+                    <input type="number" class="form-control" name="thirdPartition" id="thirdPartition" max="100" value="{{ $rule->percentualeTre }}" oninput="equalPartitions()"><br>
                 </div>
                 <div class="mb-3" style="display: flex; flex-direction: row;">
                     <button type="submit" style="width: 60%; margin-right: 10px;">
@@ -313,27 +316,21 @@
     }
 
     .col{
-        border: 1px solid lightgray;
-        background-color: white;
-        padding: 10px;
+        text-align: left;
         display: flex;
         justify-content: center;
     }
 
     form {
-        text-align: left;
         display: flex;
         flex-direction: column;
-        width: 30%;        
-        background-color: #e2e3e5;
+        text-align: left;
+        width: 65%;
+        background-color: whitesmoke;
         border: 1px solid lightgray;
         border-radius: 10px;
         padding: 20px;
-    }
-
-    #startDateGroup, #endDateGroup {
-        display: none;
-    }
+    } 
 
     #startMinute, #startHour, #endMinute, #endHour {
         margin-top: 5px;
@@ -345,91 +342,27 @@
     button[type="submit"], button[type="reset"] {
         height: 40px;
     }
+
+    @media only screen and (max-width: 767px) and (orientation: portrait) {
+        form {
+            width: 100%;
+        }
+    }
 </style>
 
 <script>
-// Funzione che attiva le date se il FLAG selezionato è GIORNO
-function showDates(){
+// Se flag diverso da giorno disabilita le date
+function disableDates(){
+    let flag = document.getElementById('flag').value
 
-    if( document.getElementById("flag").value === "GIORNO" ){
-        document.getElementById("startDateGroup").style.display = "block";
-        document.getElementById("endDateGroup").style.display = "block";
-
+    if (flag !== "GIORNO") {
+        document.getElementById('startDate').value = "";
+        document.getElementById('endDate').value = "";
+        document.getElementById('startDate').disabled = true;
+        document.getElementById('endDate').disabled = true;
     } else {
-        document.getElementById("startDateGroup").style.display = "none";
-        document.getElementById("endDateGroup").style.display = "none";
-    }
-}
-
-// Disabilitazione input
-
-document.getElementById("firstPartition").disabled = true;
-document.getElementById("secondPartition").disabled = true;
-document.getElementById("thirdPartition").disabled = true;
-
-document.getElementById("submitButton").style.display = "none";
-
-
-// Funzione che gestisce le ripartizioni di percentuali
-function equalPartitions() {
-
-    // Se la prima coppia di code non è vuota, ma le altre due sì
-    if ( document.getElementById("firstQueuePair").value != "" ) {
-
-        // Disattiva le altre due
-        document.getElementById("firstPartition").disabled = false;
-        document.getElementById("secondPartition").disabled = true;
-        document.getElementById("thirdPartition").disabled = true;
-
-        if ( document.getElementById("firstPartition").value == 100 ) {
-            
-            document.getElementById("secondQueuePair").disabled = true;
-            document.getElementById("thirdQueuePair").disabled = true;
-            
-            document.getElementById("secondPartition").disabled = true;
-            document.getElementById("thirdPartition").disabled = true;
-
-            document.getElementById("secondQueuePair").value = "";
-            document.getElementById("thirdQueuePair").value = "";
-            
-            document.getElementById("secondPartition").value = "";
-            document.getElementById("thirdPartition").value = "";
-
-            document.getElementById("submitButton").style.display = "block";
-        } else {
-            document.getElementById("secondQueuePair").disabled = false;
-            document.getElementById("thirdQueuePair").disabled = false;
-            
-            document.getElementById("secondPartition").disabled = false;
-            document.getElementById("thirdPartition").disabled = false;
-        }
-    // Se le prime due non sono vuote, ma l'ultima sì
-    }
-
-    if ( document.getElementById("firstQueuePair").value != "" && document.getElementById("secondQueuePair").value != "" ) {
-        
-        document.getElementById("thirdPartition").disabled = true;
-
-        if ( Number(document.getElementById("firstPartition").value) + Number(document.getElementById("secondPartition").value) == 100 ) { 
-            document.getElementById("thirdQueuePair").disabled = true;
-            document.getElementById("thirdPartition").disabled = true;
-
-            document.getElementById("thirdQueuePair").value = "";
-            document.getElementById("thirdPartition").value = "";
-
-            document.getElementById("submitButton").style.display = "block";
-        }
-    }
-
-    if ( document.getElementById("firstQueuePair").value != "" && document.getElementById("secondQueuePair").value != "" && document.getElementById("thirdQueuePair").value != "" ) {
-        document.getElementById("thirdPartition").disabled = false;
-        document.getElementById("submitButton").style.display = "none";
-
-        if ( Number(document.getElementById("firstPartition").value) + Number(document.getElementById("secondPartition").value) + Number(document.getElementById("thirdPartition").value) == 100 ) {
-            document.getElementById("submitButton").style.display = "block";
-        }
+        document.getElementById('startDate').disabled = false;
+        document.getElementById('endDate').disabled = false;
     }
 
 }
-</script>
-@include('partials.bottom')

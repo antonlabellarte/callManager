@@ -32,7 +32,9 @@ class RulesControllers extends Controller
     public function store(Request $request){
         $rule = new Rules();
 
-        $rule->servizioPartizionato = $request->input('service'); $servizioPartizionato = $request->input('service');
+        $servizioPartizionato = $request->input('service');
+        $rule->servizioPartizionato = $servizioPartizionato;
+
         $rule->dataInizio = $request->input('startDate'); $dataInizio = $request->input('startDate');
         $rule->dataFine = $request->input('endDate'); $dataFine = $request->input('endDate');
         $rule->dataFlag = $request->input('flag'); $dataFlag = $request->input('flag');
@@ -88,7 +90,7 @@ class RulesControllers extends Controller
             } else {
                 // Salva
                 $rule->save();
-                return redirect()->back();
+                return redirect()->back()->with('success', 'Regola inserita');
             }
 
 
@@ -108,7 +110,7 @@ class RulesControllers extends Controller
                 return redirect()->back()->with('overlapFoundWithDates', 'Trovato accavallamento');
             } else {
                 $rule->save();
-                return redirect()->back();
+                return view('rules.index')->with('success', 'Regola inserita');
             }
 
         }        
@@ -129,7 +131,64 @@ class RulesControllers extends Controller
 
     
     public function update(Request $request, string $id){
-        //
+        $rule = Rules::find($id);
+
+        $servizioPartizionato = $request->input('service');
+        $rule->servizioPartizionato = $servizioPartizionato;
+
+        $rule->dataInizio = $request->input('startDate'); $dataInizio = $request->input('startDate');
+        $rule->dataFine = $request->input('endDate'); $dataFine = $request->input('endDate');
+        $rule->dataFlag = $request->input('flag'); $dataFlag = $request->input('flag');
+        $rule->oraInizio = $request->input('startHour') . ":" . $request->input('startMinute') . ":00"; $oraInizio = $request->input('startHour') . ":" . $request->input('startMinute') . ":00";
+        $rule->oraFine = $request->input('endHour') . ":" . $request->input('endMinute') . ":00"; $oraFine = $request->input('endHour') . ":" . $request->input('endMinute') . ":00";
+
+        $dataOraInizio = $dataInizio . $oraInizio;
+        $dataOraFine = $dataFine . $oraFine;
+
+        $rule->servizioUno = $request->input('firstQueuePair'); $servizioUno = $request->input('firstQueuePair');
+        $rule->percentualeUno = $request->input('firstPartition'); $percentualeUno = $request->input('firstPartition');
+        $rule->servizioDue = $request->input('secondQueuePair');  $servizioDue = $request->input('secondQueuePair');
+        $rule->percentualeDue = $request->input('secondPartition'); $percentualeDue = $request->input('secondPartition');
+        $rule->servizioTre = $request->input('thirdQueuePair'); $servizioTre = $request->input('thirdQueuePair');
+        $rule->percentualeTre = $request->input('thirdPartition'); $percentualeTre = $request->input('thirdPartition');
+
+        // Controllo senza date
+        if( $request->input('flag') == "ALL" || $request->input('flag') == "SABATO" || $request->input('flag') == "DOMENICA" ) {
+            
+            // Controlla accavallamenti
+            $overlapWithoutDates = Rules::where('ServizioPartizionato', $servizioPartizionato)
+                ->where('DataFlag', $dataFlag)
+                ->whereRaw('? < OraFine', [$oraInizio])
+                ->whereRaw('? > OraInizio', [$oraFine])
+                ->where('ID', '!=', (int) $id)
+                ->get();
+
+            // Se trova accavallamentei
+            if ($overlapWithoutDates->IsNotEmpty() ) {
+                return back()->with('found', 'Accavallamento trovato');
+            } else {
+                $rule->update($request->all());
+                return back()->with('success', 'Regola modificata');
+            }
+        } elseif ($request->input('flag') == 'GIORNO') {
+            // Controllo accavallamenti
+            $overlapWithDates = Rules::where('ServizioPartizionato', $servizioPartizionato)
+                ->where('DataFlag', 'GIORNO')
+                ->whereRaw(
+                    '? < (CAST(DataFine AS DATETIME) + CAST(OraFine AS DATETIME)) 
+                    AND ? > (CAST(DataInizio AS DATETIME) + CAST(OraInizio AS DATETIME))',
+                    [$dataOraInizio, $dataOraFine]
+                )
+                ->where('ID', '!=', (int) $id)
+                ->get();
+
+            if ($overlapWithDates->IsNotEmpty()) {
+                return back()->with('found', 'Accavallamento trovato');
+            } else {
+                $rule->update($request->all());
+                return back()->with('success', 'Regola modificata');
+            }
+        }
     }
 
     

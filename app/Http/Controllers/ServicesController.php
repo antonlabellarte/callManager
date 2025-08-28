@@ -12,7 +12,7 @@ class ServicesController extends Controller
 {
     // Visualizza tutte le code
     public function index(){
-        $services = Services::all();
+        $services = Services::orderBy('name', 'asc')->get();
 
         return view('services.index', compact('services'));
     }
