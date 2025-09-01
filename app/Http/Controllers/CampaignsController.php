@@ -6,6 +6,8 @@ use App\Models\Campaigns;
 use App\Models\Services;
 use App\Models\CustomersList;
 use Illuminate\Http\Request;
+use App\Imports\ContrattiImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CampaignsController extends Controller
 {
@@ -176,13 +178,50 @@ class CampaignsController extends Controller
 
     public function details(string $id)
     {
-        $rule = Campaigns::find($id);
+        $campaign = Campaigns::find($id);
 
         // Recupera tutte le liste collegate a questa regola
-        $listsPerRule = CustomersList::where('regoleid', $id)->get();
+        $listsPerCampaign = CustomersList::where('campaignID', $id)->get();
 
         // Passa sia la regola che le liste alla view
-        return view('campaigns.details', compact('rule', 'listsPerRule'));
-}
+        return view('campaigns.detail', compact('campaign', 'listsPerCampaign'));
+    }
 
+    public function searchCustomersList(Request $request, string $id) {
+        $campaign = Campaigns::find($id);
+
+        $customerID = $request->input('customerID');
+        
+        // Recupera tutte le liste collegate a questa regola
+        $listsPerCampaign = CustomersList::where('campaignID', $id)
+            ->where('customerID', 'like', $customerID . '%')
+            ->get();
+
+
+        // Passa sia la regola che le liste alla view
+        return view('campaigns.detail', compact('campaign', 'listsPerCampaign'))->with('search', 'Campaign red');
+    }
+
+    public function deleteAllListsPerCampaign(string $id) {
+        $campaignList = CustomersList::where('campaignID', $id);
+        $campaignList->delete();
+        
+        return back()->with('erased', 'Campaign rule deleted');
+    }
+
+    public function importListPage(string $id) {        
+        $campaigns = Campaigns::find($id);
+        return view('campaigns.import', compact('campaigns'));
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv,xls'
+        ]);
+
+        Excel::import(new CustomersImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Importazione completata!');
+    }
 }

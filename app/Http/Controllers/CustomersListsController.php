@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Maatwebsite\Excel\Facades\Excel;
-use App\Models\CustomersList;
 use Illuminate\Http\Request;
+use App\Models\CustomersList;
 use App\Imports\ContrattiImport;
+use Maatwebsite\Excel\Facades\Excel;
 
-class CustomersListController extends Controller
+class CustomersListsController extends Controller
 {
 
     public function index(){
-        // $campaigns = CustomersList::paginate(10);
-
-        // return view('campaigns.index', compact('campaigns'));
+        //
     }
 
     
@@ -21,22 +19,15 @@ class CustomersListController extends Controller
         //
     }
     
-    public function import(Request $request){
+    public function import(Request $request)
+    {
         $request->validate([
-            'file_excel' => 'required|file|mimes:xlsx,xls',
+            'file' => 'required|mimes:xlsx,csv,xls'
         ]);
 
-        // Usa un'istanza per poter accedere ai contatori dopo l'import
-        $import = new ContrattiImport();
-        Excel::import($import, $request->file('file_excel'));
+        Excel::import(new ContrattiImport, $request->file('file'));
 
-        // Recupera i conteggi
-        $importati = $import->countCorretti;
-        $duplicati = $import->countDuplicati;
-
-        return back()->with('success', "Importazione completata. 
-            Righe importate: $importati, 
-            Duplicati: $duplicati");
+        return redirect()->back()->with('success', 'Importazione completata!');
     }
 
 

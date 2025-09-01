@@ -9,10 +9,10 @@ class CustomersList extends Model
 {
     use HasFactory;
 
-    protected $table = "campagneliste";
+    protected $table = "customerslist";
 
     protected $fillable = [
-        "id",
+        "customerID",
         "campaignID"
     ];
 }

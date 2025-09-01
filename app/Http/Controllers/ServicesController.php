@@ -73,7 +73,7 @@ class ServicesController extends Controller
             
         // Se non esistono regole
         if($existentRule->isNotEmpty()) {
-            return back()->with('ruleFound', '');
+            return back()->with('ruleFound', 'Found');
             
             // Se esistono regole
         } else {

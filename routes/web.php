@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CampaignsController;
+use App\Http\Controllers\CustomersListsController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\RulesControllers;
 
@@ -54,7 +55,7 @@ Route::get('/campaignrules/create', CampaignsController::class .'@create')->name
 // Nuova campagna regola (insert)
 Route::post('/campaignrules/storing', CampaignsController::class .'@store')->name('campaigns.store')->middleware('auth');
 // Dettagli campagna regola
-Route::get('campaignrules/details', CampaignsController::class .'@details')->name('campaigns.details')->middleware('auth');
+Route::get('campaignrules/{id}/detail', CampaignsController::class .'@details')->name('campaigns.detail')->middleware('auth');
 // Modifica campagna regola (edit)
 Route::get('campaignrules/{id}/edit', CampaignsController::class .'@edit')->name('campaigns.edit')->middleware('auth');
 // Aggiorna campagna regola (update)
@@ -62,5 +63,12 @@ Route::put('/campaignrules/{id}', CampaignsController::class . '@update')->name(
 // Elimina regola (delete)
 Route::delete('/campaignrules/{id}', CampaignsController::class . '@destroy')->name('campaigns.destroy')->middleware('auth');
 
+// Cerca liste nel dettaglio
+Route::get('campaignrules/{id}/detail/customerIDsearch', CampaignsController::class .'@searchCustomersList')->name('campaigns.findCustomerID')->middleware('auth');
+// Cancella liste per campagna
+Route::delete('/campaignrules/{id}/detail/deletinglists', CampaignsController::class . '@deleteAllListsPerCampaign')->name('campaigns.destroylist')->middleware('auth');
+// Pagina importazione liste
+Route::get('/campaignsrules/{id}/import', CampaignsController::class .'@importListPage')->name('campaigns.indexImport')->middleware('auth');
+
 // Importa campagne tramite Excel
-Route::post('/import-excel', CampaignsController::class .'@import')->name('import.excel')->middleware('auth');
+Route::post('/import-customers', [CustomersListsController::class, 'import'])->name('contratti.import');
