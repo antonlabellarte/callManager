@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\CustomersList;
+use App\Models\Campaigns;
 use App\Imports\ContrattiImport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -25,11 +26,16 @@ class CustomersListsController extends Controller
             'file' => 'required|mimes:xlsx,csv,xls'
         ]);
 
-        Excel::import(new ContrattiImport, $request->file('file'));
+        $campaignID = $request->input('campaignID');
+
+        Excel::import(new ContrattiImport($campaignID), $request->file('file'));
 
         return redirect()->back()->with('success', 'Importazione completata!');
-    }
 
+
+        // $campaign = Campaigns::where('id', $campaignID);
+        // $listsPerCampaign = CustomersList::where('campaignID', $campaignID)->get();
+    }
 
     public function edit(string $id){
         //

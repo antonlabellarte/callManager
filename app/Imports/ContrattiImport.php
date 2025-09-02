@@ -8,16 +8,19 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class ContrattiImport implements ToModel, WithHeadingRow
 {
-    /**
-     * @param array $row
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
+    protected $campaignID;
+
+    // Passiamo il valore al costruttore
+    public function __construct($campaignID)
+    {
+        $this->campaignID = $campaignID;
+    }
+
     public function model(array $row)
     {
         return new CustomersList([
-            'customerID' => $row['customerid'], // attenzione: il nome deve corrispondere all'header nel file Excel
-            // 'campaignID' => ... se vuoi impostarlo staticamente o dinamicamente
+            'customerID' => $row['customerid'], // nome colonna Excel
+            'campaignID' => $this->campaignID
         ]);
     }
 }

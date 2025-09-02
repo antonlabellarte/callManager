@@ -213,15 +213,4 @@ class CampaignsController extends Controller
         $campaigns = Campaigns::find($id);
         return view('campaigns.import', compact('campaigns'));
     }
-
-    public function import(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,csv,xls'
-        ]);
-
-        Excel::import(new CustomersImport, $request->file('file'));
-
-        return redirect()->back()->with('success', 'Importazione completata!');
-    }
 }
