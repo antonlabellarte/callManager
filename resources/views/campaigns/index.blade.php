@@ -1,30 +1,37 @@
 @include('partials.top')
 @include('navbar')
 
-<!-- Modal utilizzato per l'eliminazione della coda -->
+<!-- Modal utilizzato per l'eliminazione della campagna -->
 @if (count($campaigns) > 0)
-    @foreach ($campaigns as $campaign)
-        <div class="modal fade" id="campaignRuleModal{{ $campaign->id }}">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">⚠ Attenzione</h1>
+    @foreach($campaigns as $campaign) {{-- Il foreach server per poter associare il modal all'id selezionato --}}
+    <!-- Modal -->
+    <div class="modal fade" id="campaignModal{{ $campaign->id }}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="campaignModalLabel">⚠ Attenzione</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" style="font-weight: bold;">
-                    Sei sicuro di voler eliminare la campagna {{ $campaign->name }}?
-                    </div>
-                    <div class="modal-footer">
-                        <form action="{{ route('campaigns.destroy', $campaign->id )}}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="modalConfirmBtn">Elimina</button>
-                            <button type="button" class="modalDeleteBtn" data-bs-dismiss="modal">Annulla</button>
-                        </form>
-                    </div>
+                </div>
+                <div class="modal-body" style="font-weight: bold;">
+                    Sei sicuro di voler eliminare la campagna ID # {{ $campaign->id }} ?
+                </div>
+                <div class="modal-footer">
+                    <form action="{{ route('campaigns.destroy', $campaign->id ) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="modalSubmitBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/></svg>
+                            Conferma eliminazione
+                        </button>
+                        <button type="button" class="modalCancelBtn" data-bs-dismiss="modal">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/></svg>
+                            Annulla
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
     @endforeach
 @endif
 
@@ -68,31 +75,37 @@
                     @foreach ($campaigns as $campaign)
                     <tr>
                         <td>{{ $campaign->name }}</td>
-                        <td>{{ $campaign->dateStart }}</td>
-                        <td>{{ $campaign->dateEnd }}</td>
-                        <td>{{ $campaign->messagge }}</td>
+                        <td>{{ \Carbon\Carbon::parse($campaign->dateStart)->format('d-m-Y H:i') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($campaign->dateEnd)->format('d-m-Y H:i') }}</td>
+                        <td>
+                            @if ($campaign->message === "")
+                            <span style="color: lightgray;">N\D</span>
+                            @else
+                                {{ $campaign->message }}
+                            @endif
+                        </td>
                         <td>{{ $campaign->queue }}</td>
                         <td>{{ $campaign->toQueue }}</td>
                         <td>Tipologia coda</td>
                         <td>
                             @if ($campaign->dropCall == 1)
-                            Sì
+                                Sì
                             @else
-                            No
+                                No
                             @endif
                         </td>
                         <td>
                             @if ($campaign->allCustomers == 1)
-                            Sì
+                                Sì
                             @else
-                            No
+                                No
                             @endif
                         </td>
                         <td>
                             @if ($campaign->enabled == 1)
-                            Sì
+                                Sì
                             @else
-                            No
+                                No
                             @endif
                         </td>
                         <td>

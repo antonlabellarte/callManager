@@ -31,12 +31,12 @@ class CampaignsController extends Controller
         $campaign = new Campaigns();
 
         $campaign->message = $request->input('testo');
-        $campaign->queue = $request->input('coda');
-        $campaign->toQueue = $request->input('toQueue');
+        $campaign->queue = $request->input('queue');
+        $campaign->toQueue = $request->input('forzaCoda');
         $campaign->dropCall = $request->boolean('abbattimento');
         $campaign->name = $request->input('nomeCampagna');
-        $campaign->dateStart = $request->input('dataInizio') . " " . $request->input('startHour') . ":" . $request->input('startMinute') . ":00";
-        $campaign->dateEnd = $request->input('dataFine') . " " . $request->input('endHour') . ":" . $request->input('endMinute') . ":00";
+        $campaign->dateStart = $request->input('dataInizio') . " " . $request->input('startTime') . ":00"; $dataInizio = $request->input('dataInizio') . " " . $request->input('startTime') . ":00";
+        $campaign->dateEnd = $request->input('dataFine') . " " . $request->input('endTime') . ":00"; $dataFine = $request->input('dataFine') . " " . $request->input('endTime') . ":00";
         $campaign->allCustomers = $request->boolean('allCustomer');
         $campaign->enabled = $request->boolean('enabled');
 
@@ -117,8 +117,8 @@ class CampaignsController extends Controller
         $campaign->toQueue = $request->input('toQueue'); $forzaCoda = $request->input('toQueue');
         $campaign->dropCall = $request->boolean('abbattimento'); $dropCall = $request->boolean('abbattimento');
         $campaign->name = $request->input('nomeCampagna'); $nomeCampagna = $request->input('nomeCampagna');
-        $campaign->dateStart = $request->input('dataInizio') . " " . $request->input('startHour') . ":" . $request->input('startMinute') . ":00"; $dataInizio = $request->input('dataInizio') . " " . $request->input('startHour') . ":" . $request->input('startMinute') . ":00";
-        $campaign->dateEnd = $request->input('dataFine') . " " . $request->input('endHour') . ":" . $request->input('endMinute') . ":00"; $dataFine = $request->input('dataFine') . " " . $request->input('endHour') . ":" . $request->input('endMinute') . ":00";
+        $campaign->dateStart = $request->input('dataInizio') . " " . $request->input('startTime') . ":00"; $dataInizio = $request->input('dataInizio') . " " . $request->input('startTime') . ":00";
+        $campaign->dateEnd = $request->input('dataFine') . " " . $request->input('endTime') . ":00"; $dataFine = $request->input('dataFine') . " " . $request->input('endTime') . ":00";
         $campaign->allCustomers = $request->boolean('allCustomer'); $allCustomers = $request->boolean('allCustomer');
         $campaign->enabled = $request->boolean('enabled'); $enabled = $request->boolean('enabled');
 

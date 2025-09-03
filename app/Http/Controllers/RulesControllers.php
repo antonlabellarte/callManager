@@ -38,8 +38,8 @@ class RulesControllers extends Controller
         $rule->dataInizio = $request->input('startDate'); $dataInizio = $request->input('startDate');
         $rule->dataFine = $request->input('endDate'); $dataFine = $request->input('endDate');
         $rule->dataFlag = $request->input('flag'); $dataFlag = $request->input('flag');
-        $rule->oraInizio = $request->input('startHour') . ":" . $request->input('startMinute') . ":00"; $oraInizio = $request->input('startHour') . ":" . $request->input('startMinute') . ":00";
-        $rule->oraFine = $request->input('endHour') . ":" . $request->input('endMinute') . ":00"; $oraFine = $request->input('endHour') . ":" . $request->input('endMinute') . ":00";
+        $rule->oraInizio = $request->input('startTime') . ":00"; $oraInizio = $request->input('startTime') . ":00";
+        $rule->oraFine = $request->input('endTime') . ":00"; $oraFine = $request->input('endTime') . ":00";
         $rule->servizioUno = $request->input('firstQueuePair'); $servizioUno = $request->input('firstQueuePair');
         $rule->percentualeUno = $request->input('firstPartition'); $percentualeUno = $request->input('firstPartition');
         $rule->servizioDue = $request->input('secondQueuePair');  $servizioDue = $request->input('secondQueuePair');
@@ -139,8 +139,8 @@ class RulesControllers extends Controller
         $rule->dataInizio = $request->input('startDate'); $dataInizio = $request->input('startDate');
         $rule->dataFine = $request->input('endDate'); $dataFine = $request->input('endDate');
         $rule->dataFlag = $request->input('flag'); $dataFlag = $request->input('flag');
-        $rule->oraInizio = $request->input('startHour') . ":" . $request->input('startMinute') . ":00"; $oraInizio = $request->input('startHour') . ":" . $request->input('startMinute') . ":00";
-        $rule->oraFine = $request->input('endHour') . ":" . $request->input('endMinute') . ":00"; $oraFine = $request->input('endHour') . ":" . $request->input('endMinute') . ":00";
+        $rule->oraInizio = $request->input('startTime') . ":00"; $oraInizio = $request->input('startTime') . ":00";
+        $rule->oraFine = $request->input('endTime') . ":00"; $oraFine = $request->input('endTime') . ":00";
 
         $dataOraInizio = $dataInizio . $oraInizio;
         $dataOraFine = $dataFine . $oraFine;
