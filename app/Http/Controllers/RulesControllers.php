@@ -17,6 +17,46 @@ class RulesControllers extends Controller
         return view('rules.index', compact('rules'));
     }
 
+    public function filter(Request $request){
+        $rulesService = $request->input('service');
+        $rulesFlag = $request->input('flag');
+        $rulesDateStart = $request->input('dateStart');
+        $rulesDateEnd = $request->input('dateEnd');
+        $rulesStartTime = $request->input('startTime');
+        $rulesEndTime = $request->input('endTime');
+
+        // Query particolare per far sì che accetti valori vuoti
+        $query = Rules::query();
+
+        if (!empty($rulesService)) {
+            $query->where('servizioPartizionato', 'like', $rulesService . '%');
+        }
+
+        if (!empty($rulesFlag)) {
+            $query->where('dataFlag', $rulesFlag);
+        }
+
+        if (!empty($rulesDateStart)) {
+            $query->whereDate('dataInizio', $rulesDateStart);
+        }
+
+        if (!empty($rulesDateEnd)) {
+            $query->whereDate('dataFine', $rulesDateEnd);
+        }
+
+        if (!empty($rulesStartTime)) {
+            $query->whereTime('oraInizio', $rulesStartTime);
+        }
+
+        if (!empty($rulesEndTime)) {
+            $query->whereTime('oraFine', $rulesEndTime);
+        }
+
+        $rules = $query->get();
+
+        return view('rules.index', compact('rules'));
+    }
+
     // Pagina di creazione regola
     public function create(){
 

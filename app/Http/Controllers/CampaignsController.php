@@ -20,6 +20,56 @@ class CampaignsController extends Controller
         // return view('campaigns.index', compact('campaigns'));
     }
 
+    public function filter(Request $request){
+        $campaignsName = $request->input('name');
+        $campaignsQueue = $request->input('queue');
+        $campaignsMessage = $request->input('message');
+
+        $campaignsDateStart = $request->input('dateStart') . " " . $request->input('startTime');
+        $campaignsDateEnd = $request->input('dateEnd') . " " . $request->input('endTime');
+
+        $campaignsAllCustomer = $request->has('allCustomers') ? 1 : 0;
+        $campaignsDropCall = $request->has('dropCall') ? 1 : 0;
+        $campaignsEnabled = $request->has('enabled') ? 1 : 0;
+
+        // Query particolare per far sì che accetti valori vuoti
+        $query = Campaigns::query();
+
+        if (!empty($campaignsName)) {
+            $query->where('name', 'like', $campaignsName . '%');
+        }
+
+        if (!empty($campaignsQueue)) {
+            $query->where('queue', 'like', $campaignsQueue . '%');
+        }
+
+        if (!empty($campaignsMessage)) {
+            $query->where('message', 'like', '%' . $campaignsMessage . '%');
+        }
+
+
+        // Date time
+        if (!empty($campaignsDateStart)) {
+            $query->where('dateStart', $campaignsDateStart);
+        }
+
+        if (!empty($campaignsDateEnd)) {
+            $query->where('dateEnd', $campaignsDateEnd);
+        }
+
+        $query->where('allCustomers', '=', $campaignsAllCustomer);
+        $query->where('dropCall', '=', $campaignsDropCall);
+        $query->where('enabled', '=', $campaignsEnabled);
+
+
+        $campaigns = $query->get();
+
+        return view('campaigns.index', compact('campaigns'));
+
+
+
+    }
+
     public function create(){
         $queues = Services::orderBy('queue', 'asc')->get();
 

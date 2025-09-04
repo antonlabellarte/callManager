@@ -17,6 +17,19 @@ class ServicesController extends Controller
         return view('services.index', compact('services'));
     }
 
+    public function filter(Request $request) {
+        $serviceName = $request->input('name');
+        $serviceQueue = $request->input('queue');
+        $serviceTypology = $request->input('typology');
+        
+        $services = Services::where('name', 'like', $serviceName . '%')
+        ->where('queue', 'like', $serviceQueue . '%')
+        ->where('Typology', 'like', $serviceTypology . '%')
+        ->get();
+
+        return view('services.index', compact('services'));
+    }
+
     // Pagina di creazione coda
     public function create(){
         return view('services.add');

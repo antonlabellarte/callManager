@@ -104,6 +104,26 @@
                 </p>
             @endif<br>
         </div><br>
+
+        <div style="margin-top: 10px;">
+            <form method="GET" action="{{ route('services.filter') }}" >
+                @csrf
+                @method('GET')
+                <label>Nome</label>
+                <input type="text" name="name" id="name">
+                <label>Coda</label>
+                <input type="number" name="queue" queue="name">
+                <label>Tipologia</label>
+                <select name="typology" id="typology">
+                    <option value=""></option>
+                    <option value="principale">Principale</option>
+                    <option value="secondaria">Secondaria</option>
+                </select>
+                <button class="defaultBtn" style="height: 35px;" type="submit">Cerca</button>
+                <a href="{{ route('services.index') }}">Reimposta filtri</a>
+            </form>
+        </div><br>
+
         <div class="col" style="margin-top: 10px;">
             @if (count($services) > 0)
                 <table class="table">

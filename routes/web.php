@@ -22,6 +22,8 @@ Route::get('/', function () { return view('welcome');})->middleware('auth');
 /* Regole */
 // Lista regole
 Route::get('/rules/list', RulesControllers::class .'@index')->name('rules.index')->middleware('auth');
+// Filtraggio regole
+Route::get('/rules/filter', RulesControllers::class .'@filter')->name('rules.filter')->middleware('auth');
 // Nuove regola (create)
 Route::get('/rules/create', RulesControllers::class .'@create')->name('rules.create')->middleware('auth');
 // Nuova regola (insert)
@@ -36,6 +38,8 @@ Route::delete('/rules/{id}', RulesControllers::class . '@destroy')->name('rules.
 /* Code */
 // Lista code
 Route::get('/services/list', ServicesController::class .'@index')->name('services.index')->middleware('auth');
+// Filtraggio code
+Route::get('/services/filter', ServicesController::class .'@filter')->name('services.filter')->middleware('auth');
 // Nuove coda (create)
 Route::get('/services/create', ServicesController::class .'@create')->name('services.create')->middleware('auth');
 // Nuova coda (insert)
@@ -50,6 +54,8 @@ Route::delete('/services/{id}', ServicesController::class . '@destroy')->name('s
 /* Campagne */
 // Campagne Regola
 Route::get('/campaigns/list', CampaignsController::class .'@index')->name('campaigns.index')->middleware('auth');
+// Filtraggio code
+Route::get('/campaigns/filter', CampaignsController::class .'@filter')->name('campaigns.filter')->middleware('auth');
 // Nuova campagna regola (create)
 Route::get('/campaignrules/create', CampaignsController::class .'@create')->name('campaigns.create')->middleware('auth');
 // Nuova campagna regola (insert)

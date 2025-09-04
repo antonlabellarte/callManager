@@ -5,7 +5,7 @@ body {
     font-family: "Montserrat", sans-serif;
 }
 
-input[type="text"], input[type="password"], select, input[type="number"] {
+input[type="text"], input[type="password"], select, input[type="number"], input[type="date"], input[type="time"] {
     border: 1px solid darkgray;
     border-radius: 10px;
     height: 35px;
