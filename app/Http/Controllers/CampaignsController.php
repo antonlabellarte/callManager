@@ -23,7 +23,7 @@ class CampaignsController extends Controller
     public function filter(Request $request){
         $campaignsName = $request->input('name');
         $campaignsQueue = $request->input('queue');
-        $campaignsMessage = $request->input('message');
+        $campaignsMessage = str_replace("'", "`", $request->input('message'));
 
         $campaignsDateStart = $request->input('dateStart') . " " . $request->input('startTime');
         $campaignsDateEnd = $request->input('dateEnd') . " " . $request->input('endTime');
@@ -80,7 +80,7 @@ class CampaignsController extends Controller
     public function store(Request $request){
         $campaign = new Campaigns();
 
-        $campaign->message = $request->input('testo');
+        $campaign->message = str_replace("'", "`", $request->input('testo'));
         $campaign->queue = $request->input('queue');
         $campaign->toQueue = $request->input('forzaCoda');
         $campaign->dropCall = $request->boolean('abbattimento');
@@ -162,7 +162,7 @@ class CampaignsController extends Controller
     public function update(Request $request, string $id){
         $campaign = Campaigns::find($id);
 
-        $campaign->message = $request->input('testo'); $messaggio = $request->input('testo');
+        $campaign->message = str_replace("'", "`", $request->input('testo')); $messaggio = str_replace("'", "`", $request->input('testo'));
         $campaign->queue = $request->input('coda'); $cxoda = $request->input('coda');
         $campaign->toQueue = $request->input('toQueue'); $forzaCoda = $request->input('toQueue');
         $campaign->dropCall = $request->boolean('abbattimento'); $dropCall = $request->boolean('abbattimento');
