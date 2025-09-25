@@ -58,7 +58,7 @@ class ServicesController extends Controller
             $service->save();
             
             //return redirect()->route('orders.create')->with('success', 'Part update successfully');
-            return redirect()->route('services.index')->with('success', 'Coda inserita');
+            return redirect()->route('services.index')->with('success', 'Coda inserita correttamente');
         }
         
     }
