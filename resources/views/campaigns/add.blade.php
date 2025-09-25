@@ -23,7 +23,6 @@
                     @foreach(session('overlap') as $campaign)
                         <li>{{ $campaign->name }}</li>
                     @endforeach
-
                 @endif
             </span>
         </div>

@@ -12,6 +12,13 @@ class Authenticate extends Middleware
      */
     protected function redirectTo(Request $request): ?string
     {
-        return $request->expectsJson() ? null : route('loginPage');
+        if (! $request->expectsJson()) {
+            // Aggiungi un messaggio di errore in sessione
+            session()->flash('auth_error', 'Devi prima effettuare l\'accesso.');
+
+            return route('loginPage');
+        }
+
+        return null;
     }
 }
