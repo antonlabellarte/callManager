@@ -163,7 +163,7 @@ class CampaignsController extends Controller
         $campaign = Campaigns::find($id);
 
         $campaign->message = str_replace("'", "`", $request->input('testo')); $messaggio = str_replace("'", "`", $request->input('testo'));
-        $campaign->queue = $request->input('coda'); $cxoda = $request->input('coda');
+        $campaign->queue = $request->input('coda'); $coda = $request->input('coda');
         $campaign->toQueue = $request->input('toQueue'); $forzaCoda = $request->input('toQueue');
         $campaign->dropCall = $request->boolean('abbattimento'); $dropCall = $request->boolean('abbattimento');
         $campaign->name = $request->input('nomeCampagna'); $nomeCampagna = $request->input('nomeCampagna');

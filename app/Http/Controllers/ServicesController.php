@@ -129,12 +129,12 @@ class ServicesController extends Controller
             ->get();
         
         if ( $existentRule->isNotEmpty() ) {
-            return back()->with('ruleFound', 'Regola trovata');
+            return back()->with('ruleFound', 'Attenzione: esistono delle regole con questo servizio');
         } else {
             $existentCampaign = Campaigns::where('queue', $request->input('queue'))->get();
 
             if ( $existentCampaign->isNotEmpty()) {
-                return back()->with('campaignFound', 'Campagna trovata');
+                return back()->with('campaignFound', 'Attenzione: esistono delle campagne con questo servizio');
             } else {
                 $service->delete();
                 return redirect()->route('services.index')->with('serviceDeleted', 'Ordine eliminato');
