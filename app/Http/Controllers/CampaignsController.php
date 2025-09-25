@@ -102,7 +102,7 @@ class CampaignsController extends Controller
             ->get();
 
         if ( $existentCampaign->isNotEmpty() ) {
-            return redirect()->back()->with('warning', 'Campagna uguale trovata');    
+            return redirect()->back()->with('warning', 'Non puoi inserire una campagna uguale');    
         } else {
             $queue = $request->input('coda');
             $dateStart = $request->input('dataInizio') . " " . $request->input('startHour') . ":" . $request->input('startMinute') . ":00";
@@ -137,7 +137,7 @@ class CampaignsController extends Controller
 
             if ( $overlap->IsNotEmpty() ) {
                 // Non salva
-                return redirect()->back()->with('overlap', $overlap)->with('overlapFound', 'Accavallamento trovato');
+                return redirect()->back()->with('overlap', $overlap)->with('overlapFound', 'ATTENZIONE! Esistono le seguenti campagne in conflitto con la modifica/inserimento corrente. Verificare.');
 
             } else {
                 // salva
@@ -203,7 +203,7 @@ class CampaignsController extends Controller
             ->get();
 
         if ( $overlap->isNotEmpty() ) {
-            return redirect()->back()->with('overlap', $overlap)->with('overlapFound', 'Accavallamento trovato');
+            return redirect()->back()->with('overlap', $overlap)->with('overlapFound', 'ATTENZIONE! Esistono le seguenti campagne in conflitto con la modifica/inserimento corrente. Verificare.');
         } else {
             
             // Se allCustomers viene impostato su 1 elimina tutte le liste

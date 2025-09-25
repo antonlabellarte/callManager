@@ -123,14 +123,14 @@ class RulesControllers extends Controller
             
             if ($sameRuleNoDates->isNotEmpty()) {
                 // Trovata regola uguale
-                return redirect()->back()->with('sameRuleNoDates', $sameRuleNoDates)->with('sameRuleFoundNoDates', 'Trovata regola uguale');
+                return redirect()->back()->with('sameRuleNoDates', $sameRuleNoDates)->with('sameRuleFoundNoDates', 'Attenzione: non puoi inserire una regola uguale');
             } elseif ($justTimeOverlap->isNotEmpty()) {
                 // Trovato accavallamento
-                return redirect()->back()->with('justTimeOverlap', $justTimeOverlap)->with('overlapFoundNoDates', 'Trovato accavallamento');
+                return redirect()->back()->with('justTimeOverlap', $justTimeOverlap)->with('overlapFoundNoDates', 'Attenzione: trovato accavallamento');
             } else {
                 // Salva
                 $rule->save();
-                return redirect()->back()->with('success', 'Regola inserita');
+                return redirect()->back()->with('success', 'Regola inserita correttamente');
             }
 
 
@@ -150,7 +150,7 @@ class RulesControllers extends Controller
                 return redirect()->back()->with('overlapFoundWithDates', 'Trovato accavallamento');
             } else {
                 $rule->save();
-                return view('rules.index')->with('success', 'Regola inserita');
+                return view('rules.index')->with('success', 'Regola inserita correttamente');
             }
 
         }        
@@ -223,10 +223,10 @@ class RulesControllers extends Controller
                 ->get();
 
             if ($overlapWithDates->IsNotEmpty()) {
-                return back()->with('found', 'Accavallamento trovato');
+                return back()->with('found', 'Attenzione: sono stati trovati degli accavallamenti');
             } else {
                 $rule->update($request->all());
-                return back()->with('success', 'Regola modificata');
+                return back()->with('success', 'Regola modificata correttamente');
             }
         }
     }
@@ -235,6 +235,6 @@ class RulesControllers extends Controller
     public function destroy(string $id){
         $rule = Rules::find($id);       
         $rule->delete();        
-        return back()->with('erased', 'Rule deleted');
+        return back()->with('erased', 'Regola eliminata');
     }
 }

@@ -52,7 +52,7 @@ class ServicesController extends Controller
 
         // Se non sono vuote
         if( $existentQueue->isNotEmpty() || $existentService->isNotEmpty()) {
-            return redirect()->back()->with('warning', 'trovate');
+            return redirect()->back()->with('warning', 'Attenzione: non puoi inserire un servizio uguale ad uno già esistente');
         } else {
             // Salvataggio
             $service->save();

@@ -39,7 +39,7 @@
         @if (session('success'))
         <div id="successAlert" class="alert alert-success" role="alert" style="width: 300px; margin: 0 auto; margin-bottom: 10px;">
             <span style="float: left;">
-                Coda inserita
+                {{ session('success') }}
             </span>
             <span style="float: right;">
                 <button onclick="closeAlert()" style="border: transparent; background-color: transparent;">
@@ -67,7 +67,7 @@
         @if (session('updated'))
             <div id="successAlert" class="alert alert-success" role="alert" style="width: 300px; margin: 0 auto; margin-bottom: 10px;">
                 <span style="float: left;">
-                    Coda aggiornata
+                    {{ session('updated') }}
                 </span>
                 <span style="float: right;">
                     <button onclick="closeAlert()" style="border: transparent; background-color: transparent;">
