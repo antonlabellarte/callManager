@@ -11,13 +11,10 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class CampaignsController extends Controller
 {
-    public function index(){
-        // $campaigns = CustomersList::paginate(10);
+    public function index(){        
         $campaigns = Campaigns::all();
 
         return view('campaigns.index', compact('campaigns'));
-
-        // return view('campaigns.index', compact('campaigns'));
     }
 
     public function filter(Request $request){
@@ -47,7 +44,6 @@ class CampaignsController extends Controller
             $query->where('message', 'like', '%' . $campaignsMessage . '%');
         }
 
-
         // Date time
         if (!empty($campaignsDateStart)) {
             $query->where('dateStart', $campaignsDateStart);
@@ -65,9 +61,6 @@ class CampaignsController extends Controller
         $campaigns = $query->get();
 
         return view('campaigns.index', compact('campaigns'));
-
-
-
     }
 
     public function create(){
@@ -131,29 +124,24 @@ class CampaignsController extends Controller
                         ->where('allCustomers', 1)
                         ->where('enabled', 1);
                     });
-                })
-                ->orWhere('name', $name)
-                ->get();
+                })->orWhere('name', $name)->get();
 
             if ( $overlap->IsNotEmpty() ) {
                 // Non salva
                 return redirect()->back()->with('overlap', $overlap)->with('overlapFound', 'ATTENZIONE! Esistono le seguenti campagne in conflitto con la modifica/inserimento corrente. Verificare.');
-
             } else {
-                // salva
+                // Salva
                 $campaign->save();
                 return redirect()->route('campaigns.index')->with('success', 'Coda inserita');
             }
         }
-
     }
 
     
     public function edit(string $id){
         $campaigns = Campaigns::find($id);
 
-        $queues = Services::all();
-        
+        $queues = Services::all();        
 
         return view('campaigns.edit', compact('campaigns', 'queues'));
     }
@@ -204,20 +192,16 @@ class CampaignsController extends Controller
 
         if ( $overlap->isNotEmpty() ) {
             return redirect()->back()->with('overlap', $overlap)->with('overlapFound', 'ATTENZIONE! Esistono le seguenti campagne in conflitto con la modifica/inserimento corrente. Verificare.');
-        } else {
-            
+        } else {            
             // Se allCustomers viene impostato su 1 elimina tutte le liste
             if ( $allCustomers == 1 ) {
                 $listToDeleteIfAllCustomers = CustomersList::where('campaignID', $id);
                 $listToDeleteIfAllCustomers->delete();
             }
-
             $campaign->save();
             return redirect()->route('campaigns.index')->with('successUpdate', 'Coda aggiornata');
-
         }
     }
-
     
     public function destroy(string $id){
         $campaignrule = Campaigns::find($id);
@@ -246,7 +230,6 @@ class CampaignsController extends Controller
         $listsPerCampaign = CustomersList::where('campaignID', $id)
             ->where('customerID', 'like', $customerID . '%')
             ->get();
-
 
         // Passa sia la regola che le liste alla view
         return view('campaigns.detail', compact('campaign', 'listsPerCampaign'))->with('search', 'Campaign red');

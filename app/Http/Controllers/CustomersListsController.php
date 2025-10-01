@@ -31,10 +31,6 @@ class CustomersListsController extends Controller
         Excel::import(new ContrattiImport($campaignID), $request->file('file'));
 
         return redirect()->back()->with('success', 'Importazione completata!');
-
-
-        // $campaign = Campaigns::where('id', $campaignID);
-        // $listsPerCampaign = CustomersList::where('campaignID', $campaignID)->get();
     }
 
     public function edit(string $id){
@@ -50,7 +46,6 @@ class CustomersListsController extends Controller
     public function destroy(string $id){
         // $campaignlist = CustomersList::find($id);
         // $campaignlist->delete();
-        
         // return back()->with('erased', 'Campaign list deleted');
     }
 }

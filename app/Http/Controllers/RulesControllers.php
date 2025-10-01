@@ -9,8 +9,6 @@ use App\Models\Services;
 
 class RulesControllers extends Controller
 {
-
-    // Visualizza tutte le regole
     public function index(){
         $rules = Rules::all();
 
@@ -57,7 +55,7 @@ class RulesControllers extends Controller
         return view('rules.index', compact('rules'));
     }
 
-    // Pagina di creazione regola
+    
     public function create(){
 
         // Servizio dove tipologia = principale
@@ -143,12 +141,11 @@ class RulesControllers extends Controller
             ->whereRaw('? > STR_TO_DATE(CONCAT(dataInizio, " ", oraInizio), "%Y-%m-%d %H:%i:%s")', [$dataFine . " " . $oraFine])
             ->get();
 
-            //$sameRuleWithDates = 
-
             if($overlapWithDates->IsNotEmpty()){
-                // Trovato accavallamento
+                // Accavallamento trovato
                 return redirect()->back()->with('overlapFoundWithDates', 'Trovato accavallamento');
             } else {
+                // Accavallamento non trovato
                 $rule->save();
                 return view('rules.index')->with('success', 'Regola inserita correttamente');
             }

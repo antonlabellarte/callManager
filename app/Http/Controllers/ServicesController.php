@@ -118,8 +118,7 @@ class ServicesController extends Controller
     public function destroy(Request $request, string $id){
         $service = Services::find($id);
 
-        $serviceA = $request->input('service');
-        
+        $serviceA = $request->input('service');        
 
         $existentRule = Rules::query()
             ->where('servizioPartizionato', $request->input('service'))
