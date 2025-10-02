@@ -11,7 +11,6 @@ use App\Http\Controllers\RulesControllers;
 // Schermata di login
 Route::get('/login', function () { return view('login');})->name('loginPage');
 // Fase di login
-
 Route::get('/logging', LoginController::class .'@login')->name('login');
 // Rotta di logout
 Route::get('/logout', LoginController::class .'@logout')->name('logout')->middleware('auth');
